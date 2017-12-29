@@ -4,7 +4,6 @@
      "transform-runtime",
      "transform-decorators-legacy",
      "transform-class-properties",
-     "dva-hmr",
      ["import", [{ "libraryName": "antd-mobile", "libraryDirectory": "lib", "style": "css" }, { "libraryName": "antd", "libraryDirectory": "lib", "style": "css" }]]
    ],
    "proxy": {
@@ -18,7 +17,7 @@
   "env": {
     "development": {
       "extraBabelPlugins": [
-        "dva-hmr"
+        "dva-hmr",
       ]
     },
     "production": {
