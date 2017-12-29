@@ -1,6 +1,6 @@
 name="com.youbohudong.frontend"
 git pull
-yarn install
+cnpm install
 yarn build
 yarn global add serve
 screen -S $name -p 0 -X quit
