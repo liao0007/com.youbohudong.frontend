@@ -25,5 +25,6 @@
       "extraBabelPlugins": [
       ]
     }
-  }
+  },
+  "publicPath": "https://www.youbohudong.com/biz"
 }
