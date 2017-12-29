@@ -1,0 +1,29 @@
+{
+  "entry": "src/index.js",
+   "extraBabelPlugins": [
+     "transform-runtime",
+     "transform-decorators-legacy",
+     "transform-class-properties",
+     "dva-hmr",
+     ["import", [{ "libraryName": "antd-mobile", "libraryDirectory": "lib", "style": "css" }, { "libraryName": "antd", "libraryDirectory": "lib", "style": "css" }]]
+   ],
+   "proxy": {
+     "/api": {
+       "target": "http://www.youbohudong.com/",
+       "changeOrigin": true,
+       "pathRewrite": { "^/api" : "/api" },
+       "secure": true
+     }
+   },
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr"
+      ]
+    },
+    "production": {
+      "extraBabelPlugins": [
+      ]
+    }
+  }
+}
