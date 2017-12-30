@@ -12,8 +12,9 @@ import GlobalFooter from '../../../../../components/antd-pro/GlobalFooter';
 import SiderMenu from '../../../../../components/antd-pro/SiderMenu';
 import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../../../../../utils/utils';
-import { getMenuData } from '../common/menu';
+import {menuData } from '../common/menu';
 import logo from '../assets/logo.svg';
+import {menuFormatter} from '../../../../../utils/menu';
 
 /**
  * 根据菜单取得重定向地址.
@@ -101,8 +102,8 @@ class BasicLayout extends React.PureComponent {
       currentUser, collapsed, fetchingNotices, notices, routerData, match, location, dispatch,
     } = this.props;
 
-    const menuData = getMenuData(match.path);
-    menuData.forEach(getRedirect);
+    const formattedMenuData = menuFormatter(menuData, match.path);
+    formattedMenuData.forEach(getRedirect);
 
     const layout = (
       <Layout >
@@ -111,7 +112,7 @@ class BasicLayout extends React.PureComponent {
           location={location}
           dispatch={dispatch}
           isMobile={this.state.isMobile}
-          menus={menuData}
+          menus={formattedMenuData}
           logo={logo}
           title={'OFO小黄车'}
         />

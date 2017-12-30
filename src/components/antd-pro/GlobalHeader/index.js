@@ -22,9 +22,9 @@ const { Header } = Layout;
 
 export default class GlobalHeader extends PureComponent {
   componentDidMount() {
-    this.props.dispatch({
-      type: 'user/fetchCurrent',
-    });
+    // this.props.dispatch({
+    //   type: 'user/fetchCurrent',
+    // });
   }
 
   componentWillUnmount() {

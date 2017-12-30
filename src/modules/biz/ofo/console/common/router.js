@@ -1,6 +1,7 @@
 import React from 'react';
 import dynamic from 'dva/dynamic';
-import { getMenuData } from './menu';
+import { menuData } from './menu';
+import { getFlatMenuDataWithName } from '../../../../../utils/menu';
 
 // wrapper of dynamic
 const dynamicWrapper = (app, models, component, parentPath) => {
@@ -22,28 +23,14 @@ const dynamicWrapper = (app, models, component, parentPath) => {
   });
 };
 
-function getFlatMenuData(menus) {
-  let keys = {};
-  menus.forEach((item) => {
-    if (item.children) {
-      keys[item.path] = item.name;
-      keys = { ...keys, ...getFlatMenuData(item.children) };
-    } else {
-      keys[item.path] = item.name;
-    }
-  });
-  return keys;
-}
-
 export const getRouterData = (app, parentPath) => {
   const routerData = {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'],
         () => import('../layouts/BasicLayout'), parentPath),
-
     },
-    '/badge/card-list': {
-      component: dynamicWrapper(app, ['list'],
+    '/badge/card-list/:activeRegion/:activeCity': {
+      component: dynamicWrapper(app, ['badge'],
         () => import('../routes/Badge/CardList'), parentPath),
     },
     '/exception/403': {
@@ -82,13 +69,5 @@ export const getRouterData = (app, parentPath) => {
     // },
   };
   // Get name from ./menu.js or just set it in the router data.
-  const menuData = getFlatMenuData(getMenuData(parentPath));
-  const routerDataWithName = {};
-  Object.keys(routerData).forEach((item) => {
-    routerDataWithName[parentPath+item] = {
-      ...routerData[item],
-      name: routerData[item].name || menuData[item.replace(/^\//, '')],
-    };
-  });
-  return routerDataWithName;
+  return getFlatMenuDataWithName(menuData, routerData, parentPath);
 };

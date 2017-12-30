@@ -1,27 +1,113 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Button, Icon, List } from 'antd';
+import { Card, Button, Icon, List, Spin, Popconfirm, Upload, Checkbox } from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import Ellipsis from '../../../../../../components/antd-pro/Ellipsis';
 
 import styles from './CardList.less';
+import placeholder from './assets/placeholder.png';
+import {Constant} from '../../../../../../constant';
 
-@connect(state => ({
-  list: state.list,
-}))
-export default class CardList extends PureComponent {
+class CardList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeEmployee: undefined,
+
+      isShowCheckBox: false,
+      isIndeterminate: false,
+      isAllChecked: false,
+
+      isShowReviewModal: false,
+    };
+  }
+
   componentDidMount() {
-    this.props.dispatch({
-      type: 'list/fetch',
-      payload: {
-        count: 8,
-      },
+
+    this.props.dispatch({ type: 'badge/changeRegion', payload: { region: this.props.match.params.activeRegion }, });
+    this.props.dispatch({ type: 'badge/changeCity', payload: { city: this.props.match.params.activeCity }, });
+
+    // this.props.dispatch({
+    //   type: 'badge/fetch',
+    //   payload: {
+    //     count: 8,
+    //   },
+    // });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.activeCity !== nextProps.activeCity) {
+      this.props.dispatch({ type: 'badge/list', payload: { city: nextProps.activeCity }, });
+    }
+
+    /* update checkbox status */
+    let checkedEmployee = nextProps.employees.filter((employee) => {
+      return employee.isChecked;
+    });
+    this.setState({
+      isIndeterminate: checkedEmployee.length > 0 && checkedEmployee.length < nextProps.employees.length,
+      isAllChecked: checkedEmployee.length > 0 && checkedEmployee.length === nextProps.employees.length,
     });
   }
 
+  handleActiveEmployee(employee) {
+    this.setState({
+      ...this.state,
+      activeEmployee: employee,
+    });
+  }
+
+  handleToggleShowCheckBox() {
+    this.setState({
+      isShowCheckBox: !this.state.isShowCheckBox,
+    });
+  }
+
+  handleToggleCheckAll(event) {
+    this.props.employees.forEach((employee) => {
+      this.props.onEmployeeCheckChange(employee, event.target.checked);
+    });
+
+    this.setState({
+      isIndeterminate: false,
+      isAllChecked: event.target.checked,
+    });
+  }
+
+  handleShowReviewModel() {
+    let checkedEmployee = this.props.employees.filter((employee) => {
+      return employee.isChecked;
+    });
+
+    if (checkedEmployee.length > 0) {
+      this.setState({
+        isShowReviewModal: true,
+      });
+    } else {
+      message.warning('请先选择项目');
+    }
+  }
+
+  handleHideReviewModel() {
+    this.setState({
+      isShowReviewModal: false,
+    });
+  }
+
+  handleDelete(employee) {
+    this.props.dispatch({ type: 'badge/delete', payload: { employee: employee }, });
+  }
+
+  handleCheckChange(employee, checked) {
+    this.props.dispatch({ type: 'badge/checkChange', payload: { employee: employee, checked: checked }, });
+  }
+
+  handleUploadAvatar(employee, info) {
+    this.props.dispatch({ type: 'badge/uploadAvatar', payload: { employee: employee, info: info }, });
+  }
+
   render() {
-    const {list: {list, loading}} = this.props;
+    const { employees, isUpdatingEmployees } = this.props;
 
     const content = (
       <div className={styles.pageHeaderContent} >
@@ -62,28 +148,57 @@ export default class CardList extends PureComponent {
         <div className={styles.cardList} >
           <List
             rowKey="id"
-            loading={loading}
-            grid={{gutter: 24, lg: 3, md: 2, sm: 1, xs: 1}}
-            dataSource={['', ...list]}
+            loading={isUpdatingEmployees}
+            grid={{ gutter: 24, lg: 4, md: 3, sm: 2, xs: 1 }}
+            dataSource={['', ...employees]}
             renderItem={item => (item ? (
-                <List.Item key={item.id} >
-                  <Card hoverable className={styles.card}
-                        actions={[<a >操作一</a >, <a >操作二</a >]} >
-                    <Card.Meta
-                      avatar={<img alt="" className={styles.cardAvatar}
-                                   src={item.avatar} />}
-                      title={<a href="#" >{item.title}</a >}
-                      description={(
-                        <Ellipsis className={styles.item}
-                                  lines={3} >{item.description}</Ellipsis >
-                      )}
-                    />
-                  </Card >
+                <List.Item key={item.uid} >
+
+                  <Spin spinning={this.props.updatingEmployeeUids.includes(item.uid)} >
+                    <Card
+                      hoverable
+                      className={styles.card}
+                      cover={<img
+                        onClick={() => item.badge !== undefined && window.open(item.badge)}
+                        alt=""
+                        src={item.badge === undefined ? placeholder : `${item.badgeThumb}`} />}
+
+                      extra={this.state.isShowCheckBox ? <Checkbox
+                        onChange={(e) => this.handleCheckChange(item, e.target.checked)}
+                        checked={item.isChecked}
+                      /> : null}
+
+                      actions={[
+                        <Popconfirm placement="topLeft" title={'确定删除 ' + item.name + ' ?'}
+                                    okText="确定"
+                                    onConfirm={() => this.handleDelete(item)}
+                                    cancelText="取消" >
+                          <Icon type="delete" />
+                        </Popconfirm >,
+
+                        <Icon onClick={() => this.handleActiveEmployee(item)} type="edit" />,
+
+                        <Upload
+                          showUploadList={false}
+                          action={Constant.ApiDomain + 'biz/vip/ofo/badges/upload/photo/' + item.uid}
+                          onChange={(info) => this.handleUploadAvatar(item, info)}
+                        >
+
+                          <Icon type="upload" />
+                        </Upload >]}
+                    >
+                      <Card.Meta
+                        title={`${item.workId} / ${item.name}`}
+                        description={`${item.englishName} / ${item.department}`}
+                      />
+                    </Card >
+                  </Spin >
+
                 </List.Item >
               ) : (
                 <List.Item >
                   <Button type="dashed" className={styles.newButton} >
-                    <Icon type="plus" /> 新增产品
+                    <Icon type="plus" /> 新增
                   </Button >
                 </List.Item >
               )
@@ -94,3 +209,15 @@ export default class CardList extends PureComponent {
     );
   }
 }
+
+export default connect(state => ({
+  employees: state.badge.employees,
+  isUpdatingEmployees: state.badge.isUpdatingEmployees,
+  isUploadingEmployeeList: state.badge.isUploadingEmployeeList,
+  updatingEmployeeUids: state.badge.updatingEmployeeUids,
+  activeEmployee: state.badge.activeEmployee,
+
+  regions: state.badge.regions,
+  activeRegion: state.badge.activeRegion,
+  activeCity: state.badge.activeCity,
+}))(CardList);
