@@ -65,7 +65,7 @@ class DownloadPage extends Component {
 
         case 'iOS':
           return <img onClick={() => this.gotoAppStore()}
-                      style={{ width: '40%', cursor: 'pointer', display: this.state.isLoading ? 'none' : 'block' }} src={apple} alt="" />;
+                      style={{ width: '40%', cursor: 'pointer', display: this.state.isLoading ? 'none' : 'inline' }} src={apple} alt="" />;
 
         default:
           return null;
