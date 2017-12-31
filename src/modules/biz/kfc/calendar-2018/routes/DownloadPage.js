@@ -46,6 +46,7 @@ class DownloadPage extends Component {
     this.state = {
       isLoading: true,
       isHintVisible: false,
+      isShowCoupon: false,
       screenshots: [
         screenshot1,
         screenshot2,
@@ -73,7 +74,7 @@ class DownloadPage extends Component {
     const renderScreenshotImage = (screenshot) => {
       switch (getMobileOperatingSystem()) {
         case 'Android':
-          return <img onClick={() => this.downloadAndroidApk()} style={{  width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
+          return <img onClick={() => this.downloadAndroidApk()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
 
         case 'iOS':
           return <img onClick={() => this.gotoAppStore()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
@@ -81,17 +82,41 @@ class DownloadPage extends Component {
         default:
           return null;
       }
-    }
+    };
 
     return (
       <DocumentTitle title="K记大玩家" >
         <div style={{ position: 'relative', backgroundColor: '#000000', overflow: 'hidden', width: window.innerWidth, height: window.innerHeight, }} >
+
+          {/* eager load image */}
+          <img src={coupon} style={{ display: 'none' }} onLoad={() => {this.setState({ ...this.state, isLoading: false });}} />
 
           <ActivityIndicator
             toast
             text="加载中"
             animating={this.state.isLoading}
           />
+
+          <Modal
+            visible={!this.state.isLoading && this.state.isShowCoupon}
+            transparent
+            maskClosable={false}
+            footer={[
+              {
+                text: '取消',
+                style: 'default',
+                onPress: () => this.setState({ ...this.state, isShowCoupon: false }),
+              },
+              {
+                text: '领取',
+                onPress: () => { window.location.href = 'https://mp.weixin.qq.com/bizmall/cardshelf?t=cardticket/shelf_list&biz=MzIwMDAyMDI4MQ==&shelf_id=26&showwxpaytitle=1&scene=1000007#wechat_redirect'; },
+              },
+            ]}
+          >
+            <div >
+              <img src={coupon} style={{ width: '100%' }} />苹果应用稍后开放，请耐心等待！小K送上超值现磨咖啡买一送一优惠券以表心意！😘
+            </div >
+          </Modal >
 
           <Carousel
             autoplay={false}
@@ -104,7 +129,7 @@ class DownloadPage extends Component {
             ))}
           </Carousel >
 
-          <div style={{ position: 'absolute', width: '100%', bottom: "5%", textAlign: 'center' }} >
+          <div style={{ position: 'absolute', width: '100%', bottom: '5%', textAlign: 'center' }} >
             {renderButton()}
           </div >
 
@@ -117,32 +142,23 @@ class DownloadPage extends Component {
           }} >
             <img src={hint} style={{ position: 'absolute', right: 20, top: 20, width: '50%', }} alt="" />
           </div >
-
-
         </div >
       </DocumentTitle >
     );
   }
 
   gotoAppStore() {
-    alert(null, <div ><img src={coupon} onLoad={() => {this.setState({...this.state, isLoading: false})}} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，请耐心等待！小K送上超值现磨咖啡买一送一优惠券以表心意！😘</div >, [
-      {
-        text: '取消',
-        onPress: () => {},
-        style: 'default',
-      },
-      {
-        text: '领取',
-        onPress: () => window.location.href = 'https://mp.weixin.qq.com/bizmall/cardshelf?t=cardticket/shelf_list&biz=MzIwMDAyMDI4MQ==&shelf_id=26&showwxpaytitle=1&scene=1000007#wechat_redirect',
-      },
-    ]);
+    this.setState({
+      ...this.state,
+      isShowCoupon: true,
+    });
     return;
 
     //
     if (isWeChatBrowser()) {
       this.setState({
         isHintVisible: true,
-        isLoading: false
+        isLoading: false,
       });
     } else {
       window.location.href = 'http://www.apple.com/';
@@ -153,7 +169,7 @@ class DownloadPage extends Component {
     if (isWeChatBrowser()) {
       this.setState({
         isHintVisible: true,
-        isLoading: false
+        isLoading: false,
       });
     } else {
       window.location.href = Constant.StaticDomain + 'biz/vip/kfc/calendar-2018/app-release.apk';
