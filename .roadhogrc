@@ -22,8 +22,8 @@
     },
     "production": {
       "extraBabelPlugins": [
-      ]
+      ],
+      "publicPath": "https://www.youbohudong.com/biz"
     }
-  },
-  "publicPath": "https://www.youbohudong.com/biz"
+  }
 }
