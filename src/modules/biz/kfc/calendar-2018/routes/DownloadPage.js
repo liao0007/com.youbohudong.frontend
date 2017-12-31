@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Toast } from 'antd-mobile';
+import { Modal, Button, WhiteSpace, WingBlank, Toast } from 'antd-mobile';
+
+const alert = Modal.alert;
+
 import cover from '../assets/cover.gif';
 import apple from '../assets/apple.png';
 import android from '../assets/android.png';
 import hint from '../assets/hint.gif';
+import coupon from '../assets/coupon.png';
 import { Constant } from '../../../../../constant';
 
 function isWeChatBrowser() {
@@ -79,7 +83,7 @@ class DownloadPage extends Component {
   }
 
   gotoAppStore() {
-    Toast.info('App正在审核，敬请期待。安卓已开放，安卓手机扫描二维码即可下载使用！');
+    this.handleShowAlert();
 
     // skip for now
     return;
@@ -100,6 +104,20 @@ class DownloadPage extends Component {
     } else {
       window.location.href = Constant.StaticDomain + 'biz/vip/kfc/calendar-2018/app-release.apk';
     }
+  };
+
+  handleShowAlert() {
+    alert('敬请期待', <div>App正在审核，敬请期待。安卓已开放，安卓手机扫描二维码即可下载使用！<img src={coupon} style={{width: "100%"}} /></div>, [
+      {
+        text: '取消',
+        onPress: () => {},
+        style: 'default',
+      },
+      {
+        text: '领取',
+        onPress: () => window.location.href = 'https://mp.weixin.qq.com/bizmall/cardshelf?t=cardticket/shelf_list&biz=MzIwMDAyMDI4MQ==&shelf_id=26&showwxpaytitle=1&scene=1000007#wechat_redirect',
+      },
+    ]);
   };
 
   componentDidMount() {
@@ -123,7 +141,7 @@ class DownloadPage extends Component {
           default:
             return null;
         }
-      }, 1000);
+      }, 200);
     }
   }
 }
