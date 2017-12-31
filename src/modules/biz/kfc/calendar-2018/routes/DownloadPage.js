@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal, Button, WhiteSpace, WingBlank, Toast } from 'antd-mobile';
+import { Modal, Button, WhiteSpace, WingBlank, Toast, Carousel } from 'antd-mobile';
 import cover from '../assets/cover.gif';
 import apple from '../assets/apple.png';
 import android from '../assets/android.png';
 import hint from '../assets/hint.gif';
 import coupon from '../assets/coupon.png';
+import screenshot1 from '../assets/screenshot/1.png';
+import screenshot2 from '../assets/screenshot/2.png';
+import screenshot3 from '../assets/screenshot/3.png';
+import screenshot4 from '../assets/screenshot/4.png';
+import screenshot5 from '../assets/screenshot/5.png';
 import { Constant } from '../../../../../constant';
 import DocumentTitle from 'react-document-title';
 
@@ -41,6 +46,14 @@ class DownloadPage extends Component {
     super(props);
     this.state = {
       isHintVisible: false,
+
+      screenshots: [
+        screenshot1,
+        screenshot2,
+        screenshot3,
+        screenshot4,
+        screenshot5,
+      ],
     };
   }
 
@@ -62,7 +75,21 @@ class DownloadPage extends Component {
       <DocumentTitle title="K记大玩家" >
         <div style={{ position: 'relative', backgroundColor: '#000000', overflow: 'hidden', width: window.innerWidth, height: window.innerHeight, }} >
 
-          <img src={cover} style={{ position: 'absolute', width: '100%', top: Math.floor((window.innerHeight - 667) / 2), left: 0, }} alt="" />
+          <Carousel
+            autoplay={false}
+            infinite
+            selectedIndex={1}
+            style={{ position: 'absolute', width: '100%', top: 0, left: 0, }}
+          >
+            {this.state.screenshots.map(screenshot => (
+              <img
+                key={screenshot}
+                src={screenshot}
+                alt=""
+                style={{ width: '100%', verticalAlign: 'top' }}
+              />
+            ))}
+          </Carousel >
 
           <div style={{ position: 'absolute', width: '100%', bottom: '10%', textAlign: 'center', }} >
             {renderButton()}
@@ -77,13 +104,15 @@ class DownloadPage extends Component {
           }} >
             <img src={hint} style={{ position: 'absolute', right: 20, top: 20, width: '50%', }} alt="" />
           </div >
+
+
         </div >
       </DocumentTitle >
     );
   }
 
   gotoAppStore() {
-    alert('敬请期待', <div >App正在审核，敬请期待。安卓已开放，安卓手机扫描二维码即可下载使用！<img src={coupon} style={{ width: '100%' }} /></div >, [
+    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，好多精彩贴纸等你来玩，K记先送上超值现磨咖啡买一送一券。<a href="#" onClick={() => this.handleToggleScreenShot()}>查看</a></div >, [
       {
         text: '取消',
         onPress: () => {},
@@ -115,6 +144,13 @@ class DownloadPage extends Component {
       window.location.href = Constant.StaticDomain + 'biz/vip/kfc/calendar-2018/app-release.apk';
     }
   };
+
+  handleToggleScreenShot() {
+    this.setState({
+      ...this.state,
+      isScreenshotsVisible: !this.state.isScreenshotsVisible
+    })
+  }
 
   componentDidMount() {
     switch (getMobileOperatingSystem()) {
