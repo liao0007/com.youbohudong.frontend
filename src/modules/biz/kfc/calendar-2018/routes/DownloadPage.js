@@ -64,7 +64,8 @@ class DownloadPage extends Component {
           return <img onClick={() => this.downloadAndroidApk()} style={{ width: '40%', cursor: 'pointer' }} src={android} alt="" />;
 
         case 'iOS':
-          return <img onClick={() => this.gotoAppStore()} style={{ width: '40%', cursor: 'pointer' }} src={apple} alt="" />;
+          return <img onClick={() => this.gotoAppStore()}
+                      style={{ width: '40%', cursor: 'pointer', display: this.state.isLoading ? 'none' : 'block' }} src={apple} alt="" />;
 
         default:
           return null;
@@ -77,7 +78,7 @@ class DownloadPage extends Component {
           return <img onClick={() => this.downloadAndroidApk()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
 
         case 'iOS':
-          return <img onClick={() => this.gotoAppStore()} style={{ width: window.innerWidth, cursor: 'pointer', display: this.state.isLoading ? "none" : "block" }} src={screenshot} alt="" />;
+          return <img onClick={() => this.gotoAppStore()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
 
         default:
           return null;
