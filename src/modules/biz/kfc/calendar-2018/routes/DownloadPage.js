@@ -107,7 +107,7 @@ class DownloadPage extends Component {
   };
 
   handleShowAlert() {
-    alert('敬请期待', <div>App正在审核，敬请期待。安卓已开放，安卓手机扫描二维码即可下载使用！<img src={coupon} style={{width: "100%"}} /></div>, [
+    alert('敬请期待', <div >App正在审核，敬请期待。安卓已开放，安卓手机扫描二维码即可下载使用！<img src={coupon} style={{ width: '100%' }} /></div >, [
       {
         text: '取消',
         onPress: () => {},
@@ -122,14 +122,19 @@ class DownloadPage extends Component {
 
   componentDidMount() {
     document.title = '下载K记大玩家';
+    const mobileOS = getMobileOperatingSystem();
 
-    if (isWeChatBrowser()) {
+    if (isWeChatBrowser() && mobileOS === 'Android') {
       this.setState({
         isHintVisible: true,
       });
+
+    } else if (isWeChatBrowser() && mobileOS === 'iOS') {
+      this.handleShowAlert();
+
     } else {
       setTimeout(() => {
-        switch (getMobileOperatingSystem()) {
+        switch (mobileOS) {
           case 'Android':
             this.downloadAndroidApk();
             break;
