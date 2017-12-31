@@ -120,7 +120,7 @@ class DownloadPage extends Component {
   }
 
   gotoAppStore() {
-    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，好多精彩贴纸等你来玩，K记先送上超值现磨咖啡买一送一券。</div >, [
+    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />客官有礼啦！小K送上超值咖啡买一送一券以表心意！苹果应用将于1月10日正式开放，请耐心等待！</div >, [
       {
         text: '取消',
         onPress: () => {},
