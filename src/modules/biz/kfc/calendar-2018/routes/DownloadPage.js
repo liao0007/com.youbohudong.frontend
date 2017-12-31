@@ -5,6 +5,7 @@ import cover from '../assets/cover.gif';
 import apple from '../assets/apple.png';
 import android from '../assets/android.png';
 import hint from '../assets/hint.gif';
+import { Constant } from '../../../../../constant';
 
 function isWeChatBrowser() {
   return /micromessenger/.test(navigator.userAgent.toLowerCase());
@@ -97,8 +98,7 @@ class DownloadPage extends Component {
         isHintVisible: true,
       });
     } else {
-      window.location.href = Constant.StaticDomain +
-        'biz/vip/kfc/calendar-2018/app-release.apk';
+      window.location.href = Constant.StaticDomain + 'biz/vip/kfc/calendar-2018/app-release.apk';
     }
   };
 
