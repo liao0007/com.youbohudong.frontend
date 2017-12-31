@@ -4,7 +4,7 @@ import { Modal, Carousel } from 'antd-mobile';
 import apple from '../assets/apple.png';
 import android from '../assets/android.png';
 import hint from '../assets/hint.gif';
-import coupon from '../assets/coupon.png';
+import coupon from '../assets/coupon.gif';
 import screenshot1 from '../assets/screenshot/1.jpg';
 import screenshot2 from '../assets/screenshot/2.jpg';
 import screenshot3 from '../assets/screenshot/3.jpg';
