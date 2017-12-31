@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal, Carousel } from 'antd-mobile';
+import { Modal, Carousel, ActivityIndicator } from 'antd-mobile';
 import apple from '../assets/apple.png';
 import android from '../assets/android.png';
 import hint from '../assets/hint.gif';
@@ -44,6 +44,7 @@ class DownloadPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       isHintVisible: false,
       screenshots: [
         screenshot1,
@@ -86,6 +87,12 @@ class DownloadPage extends Component {
       <DocumentTitle title="K记大玩家" >
         <div style={{ position: 'relative', backgroundColor: '#000000', overflow: 'hidden', width: window.innerWidth, height: window.innerHeight, }} >
 
+          <ActivityIndicator
+            toast
+            text="加载中"
+            animating={this.state.isLoading}
+          />
+
           <Carousel
             autoplay={false}
             infinite
@@ -97,7 +104,7 @@ class DownloadPage extends Component {
             ))}
           </Carousel >
 
-          <div style={{ position: 'absolute', width: '100%', bottom: 14, textAlign: 'center' }} >
+          <div style={{ position: 'absolute', width: '100%', bottom: "5%", textAlign: 'center' }} >
             {renderButton()}
           </div >
 
@@ -118,7 +125,7 @@ class DownloadPage extends Component {
   }
 
   gotoAppStore() {
-    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，请耐心等待！小K送上超值现磨咖啡买一送一优惠券以表心意！😘</div >, [
+    alert(null, <div ><img src={coupon} onLoad={() => {this.setState({...this.state, isLoading: false})}} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，请耐心等待！小K送上超值现磨咖啡买一送一优惠券以表心意！😘</div >, [
       {
         text: '取消',
         onPress: () => {},
