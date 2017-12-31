@@ -72,10 +72,10 @@ class DownloadPage extends Component {
     const renderScreenshotImage = (screenshot) => {
       switch (getMobileOperatingSystem()) {
         case 'Android':
-          return <img onClick={() => this.downloadAndroidApk()} style={{ width: '100%', height:"100%", cursor: 'pointer' }} src={screenshot} alt="" />;
+          return <img onClick={() => this.downloadAndroidApk()} style={{  width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
 
         case 'iOS':
-          return <img onClick={() => this.gotoAppStore()} style={{ width: '100%', height:"100%", cursor: 'pointer' }} src={screenshot} alt="" />;
+          return <img onClick={() => this.gotoAppStore()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
 
         default:
           return null;
@@ -87,7 +87,7 @@ class DownloadPage extends Component {
         <div style={{ position: 'relative', backgroundColor: '#000000', overflow: 'hidden', width: window.innerWidth, height: window.innerHeight, }} >
 
           <Carousel
-            autoplay={true}
+            autoplay={false}
             infinite
             selectedIndex={0}
             style={{ position: 'absolute', width: window.innerWidth, height: window.innerHeight }}
@@ -97,11 +97,9 @@ class DownloadPage extends Component {
             ))}
           </Carousel >
 
-          {/*
-          <div style={{ position: 'absolute', width: '100%', bottom: '10%', textAlign: 'center', display: "none" }} >
+          <div style={{ position: 'absolute', width: '100%', bottom: 14, textAlign: 'center' }} >
             {renderButton()}
           </div >
-          */}
 
           <div style={{
             position: 'absolute',
@@ -120,7 +118,7 @@ class DownloadPage extends Component {
   }
 
   gotoAppStore() {
-    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />客官有礼啦！小K送上超值咖啡买一送一券以表心意！苹果应用将于1月10日正式开放，请耐心等待！</div >, [
+    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，请耐心等待！小K送上超值现磨咖啡买一送一优惠券以表心意！😘</div >, [
       {
         text: '取消',
         onPress: () => {},
