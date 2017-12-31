@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal, Button, WhiteSpace, WingBlank, Toast, Carousel } from 'antd-mobile';
-import cover from '../assets/cover.gif';
+import { Modal, Carousel } from 'antd-mobile';
 import apple from '../assets/apple.png';
 import android from '../assets/android.png';
 import hint from '../assets/hint.gif';
 import coupon from '../assets/coupon.png';
-import screenshot1 from '../assets/screenshot/1.png';
-import screenshot2 from '../assets/screenshot/2.png';
-import screenshot3 from '../assets/screenshot/3.png';
-import screenshot4 from '../assets/screenshot/4.png';
-import screenshot5 from '../assets/screenshot/5.png';
+import screenshot1 from '../assets/screenshot/1.jpg';
+import screenshot2 from '../assets/screenshot/2.jpg';
+import screenshot3 from '../assets/screenshot/3.jpg';
+import screenshot4 from '../assets/screenshot/4.jpg';
+import screenshot5 from '../assets/screenshot/5.jpg';
 import { Constant } from '../../../../../constant';
 import DocumentTitle from 'react-document-title';
 
@@ -46,6 +45,7 @@ class DownloadPage extends Component {
     super(props);
     this.state = {
       isHintVisible: false,
+      isShowButton: true,
 
       screenshots: [
         screenshot1,
@@ -76,10 +76,11 @@ class DownloadPage extends Component {
         <div style={{ position: 'relative', backgroundColor: '#000000', overflow: 'hidden', width: window.innerWidth, height: window.innerHeight, }} >
 
           <Carousel
-            autoplay={false}
+            autoplay={true}
             infinite
-            selectedIndex={1}
-            style={{ position: 'absolute', width: '100%', top: 0, left: 0, }}
+            selectedIndex={0}
+            style={{ position: 'absolute', width: window.innerWidth, height: window.innerHeight }}
+            beforeChange ={(from, to) => { this.setState({...this.state, isShowButton: to === 0}) }}
           >
             {this.state.screenshots.map(screenshot => (
               <img
@@ -91,7 +92,7 @@ class DownloadPage extends Component {
             ))}
           </Carousel >
 
-          <div style={{ position: 'absolute', width: '100%', bottom: '10%', textAlign: 'center', }} >
+          <div style={{ position: 'absolute', width: '100%', bottom: '10%', textAlign: 'center', display: this.state.isShowButton ? "block" : "none" }} >
             {renderButton()}
           </div >
 
@@ -112,7 +113,7 @@ class DownloadPage extends Component {
   }
 
   gotoAppStore() {
-    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，好多精彩贴纸等你来玩，K记先送上超值现磨咖啡买一送一券。<a href="#" onClick={() => this.handleToggleScreenShot()}>查看</a></div >, [
+    alert(null, <div ><img src={coupon} style={{ width: '100%' }} />苹果应用将于1月10日正式开放，好多精彩贴纸等你来玩，K记先送上超值现磨咖啡买一送一券。</div >, [
       {
         text: '取消',
         onPress: () => {},
@@ -148,8 +149,8 @@ class DownloadPage extends Component {
   handleToggleScreenShot() {
     this.setState({
       ...this.state,
-      isScreenshotsVisible: !this.state.isScreenshotsVisible
-    })
+      isScreenshotsVisible: !this.state.isScreenshotsVisible,
+    });
   }
 
   componentDidMount() {
