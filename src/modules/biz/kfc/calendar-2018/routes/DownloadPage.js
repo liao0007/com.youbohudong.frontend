@@ -45,8 +45,6 @@ class DownloadPage extends Component {
     super(props);
     this.state = {
       isHintVisible: false,
-      isShowButton: true,
-
       screenshots: [
         screenshot1,
         screenshot2,
@@ -71,6 +69,19 @@ class DownloadPage extends Component {
       }
     };
 
+    const renderScreenshotImage = (screenshot) => {
+      switch (getMobileOperatingSystem()) {
+        case 'Android':
+          return <img onClick={() => this.downloadAndroidApk()} style={{ width: '100%', height:"100%", cursor: 'pointer' }} src={screenshot} alt="" />;
+
+        case 'iOS':
+          return <img onClick={() => this.gotoAppStore()} style={{ width: '100%', height:"100%", cursor: 'pointer' }} src={screenshot} alt="" />;
+
+        default:
+          return null;
+      }
+    }
+
     return (
       <DocumentTitle title="K记大玩家" >
         <div style={{ position: 'relative', backgroundColor: '#000000', overflow: 'hidden', width: window.innerWidth, height: window.innerHeight, }} >
@@ -80,21 +91,17 @@ class DownloadPage extends Component {
             infinite
             selectedIndex={0}
             style={{ position: 'absolute', width: window.innerWidth, height: window.innerHeight }}
-            beforeChange ={(from, to) => { this.setState({...this.state, isShowButton: to === 0}) }}
           >
             {this.state.screenshots.map(screenshot => (
-              <img
-                key={screenshot}
-                src={screenshot}
-                alt=""
-                style={{ width: '100%', verticalAlign: 'top' }}
-              />
+              renderScreenshotImage(screenshot)
             ))}
           </Carousel >
 
-          <div style={{ position: 'absolute', width: '100%', bottom: '10%', textAlign: 'center', display: this.state.isShowButton ? "block" : "none" }} >
+          {/*
+          <div style={{ position: 'absolute', width: '100%', bottom: '10%', textAlign: 'center', display: "none" }} >
             {renderButton()}
           </div >
+          */}
 
           <div style={{
             position: 'absolute',
