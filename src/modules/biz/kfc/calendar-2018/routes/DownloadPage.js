@@ -142,6 +142,7 @@ class DownloadPage extends Component {
     if (isWeChatBrowser()) {
       this.setState({
         isHintVisible: true,
+        isLoading: false
       });
     } else {
       window.location.href = 'http://www.apple.com/';
@@ -152,6 +153,7 @@ class DownloadPage extends Component {
     if (isWeChatBrowser()) {
       this.setState({
         isHintVisible: true,
+        isLoading: false
       });
     } else {
       window.location.href = Constant.StaticDomain + 'biz/vip/kfc/calendar-2018/app-release.apk';
