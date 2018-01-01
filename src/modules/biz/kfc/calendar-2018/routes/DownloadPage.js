@@ -75,10 +75,10 @@ class DownloadPage extends Component {
     const renderScreenshotImage = (screenshot) => {
       switch (getMobileOperatingSystem()) {
         case 'Android':
-          return <img onClick={() => this.downloadAndroidApk()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
+          return <img key={screenshot} onClick={() => this.downloadAndroidApk()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
 
         case 'iOS':
-          return <img onClick={() => this.gotoAppStore()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
+          return <img key={screenshot} onClick={() => this.gotoAppStore()} style={{ width: window.innerWidth, cursor: 'pointer' }} src={screenshot} alt="" />;
 
         default:
           return null;

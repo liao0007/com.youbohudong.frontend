@@ -4,11 +4,17 @@ import 'moment/locale/zh-cn';
 import './index.css';
 import createHistory from 'history/createBrowserHistory';
 import FastClick from 'fastclick';
+import ReactGA from 'react-ga';
+
+const history = createHistory();
+ReactGA.initialize('UA-68706897-1', { debug: false }); //Unique Google Analytics tracking number
+ReactGA.pageview(window.location.pathname + window.location.search);
+history.listen((location) => {
+  ReactGA.pageview(location.pathname + location.search);
+});
 
 // 1. Initialize
-const app = dva({
-  history: createHistory(),
-});
+const app = dva({ history });
 
 // 2. Plugins
 // app.use({});
