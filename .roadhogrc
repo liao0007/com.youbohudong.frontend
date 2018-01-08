@@ -8,7 +8,7 @@
    ],
    "proxy": {
      "/api": {
-       "target": "http://www.youbohudong.com/",
+       "target": "https://www.youbohudong.com/",
        "changeOrigin": true,
        "pathRewrite": { "^/api" : "/api" },
        "secure": true

@@ -116,7 +116,7 @@ export default class GlobalHeader extends PureComponent {
         {isMobile && (
           [
             (
-              <Link to="/" className={styles.logo} key="logo" >
+              <Link to={this.props.logoLink || '/'} className={styles.logo} key="logo" >
                 <img src={this.props.logo} alt="logo" width="32" />
               </Link >),
             <Divider type="vertical" key="line" />,

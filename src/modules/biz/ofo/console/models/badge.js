@@ -1,30 +1,22 @@
 import { queryFakeList } from '../services/api';
 import { Constant } from '../../../../../constant';
-import responsive from '../../../../../components/antd-pro/DescriptionList/responsive';
-import { list } from '../services/badge';
+import { batchDeleteEmployee, createEmployee, deleteEmployee, listEmployee, updateEmployee } from '../services/badge';
+import { notification } from 'antd';
 
 export default {
   namespace: 'badge',
 
   state: {
     employees: [],
+    activeEmployee: undefined,
     isUpdatingEmployees: false,
     updatingEmployeeUids: [],
     isUploadingEmployeeList: false,
 
     regions: [
       {
-        key: 'nw', name: '华北', cities: [
+        key: 'main-land', name: '大陆', cities: [
           { key: '010', name: '北京' },
-          { key: '011', name: '天津' },
-          { key: '012', name: '上海' },
-        ],
-      },
-      {
-        key: 'nb', name: '西南', cities: [
-          { key: '020', name: '重庆' },
-          { key: '021', name: '成都' },
-          { key: '022', name: '西安' },
         ],
       },
     ],
@@ -41,42 +33,60 @@ export default {
       yield put({ type: 'onCityChanged', payload: payload });
     },
 
-    * list({ payload }, { call, put }) {
-      yield put({ type: 'onList' });
-      const response = yield call(list, payload.city);
-      yield put({ type: 'onList', status: Constant.ActionStatus.Success, payload: { employees: response } });
+    * toggleCheck({ payload }, { call, put }) {
+      yield put({ type: 'onToggleCheck', payload: payload });
     },
 
-    * fetch({ payload }, { call, put }) {
-      yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
-      const response = yield call(queryFakeList, payload);
-      yield put({
-        type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
-      });
-      yield put({
-        type: 'changeLoading',
-        payload: false,
-      });
+    * toggleCheckAll({ payload }, { call, put }) {
+      yield put({ type: 'onToggleCheckAll', payload: payload });
     },
-    * appendFetch({ payload }, { call, put }) {
-      yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
-      const response = yield call(queryFakeList, payload);
-      yield put({
-        type: 'appendList',
-        payload: Array.isArray(response) ? response : [],
-      });
-      yield put({
-        type: 'changeLoading',
-        payload: false,
-      });
+
+    * uploadEmployeeList({ payload }, { call, put }) {
+      yield put({ type: 'onUploadEmployeeList', payload: payload });
     },
+
+    * uploadEmployeeAvatar({ payload }, { call, put }) {
+      yield put({ type: 'onUploadEmployeeAvatar', payload: payload });
+    },
+
+    * listEmployee({ payload }, { call, put }) {
+      yield put({ type: 'onListEmployee' });
+      const response = yield call(listEmployee, payload.city);
+      yield put({ type: 'onListEmployee', status: Constant.ActionStatus.Success, payload: { employees: response } });
+    },
+
+    * deleteEmployee({ payload }, { call, put }) {
+      yield put({ type: 'onDeleteEmployee', payload: payload });
+      const response = yield call(deleteEmployee, payload.employee);
+      yield put({ type: 'onDeleteEmployee', status: Constant.ActionStatus.Success, payload: { employee: response } });
+    },
+
+    * batchDeleteEmployee({ payload }, { call, put }) {
+      yield put({ type: 'onBatchDeleteEmployee', payload: payload });
+      const response = yield call(batchDeleteEmployee, payload.employees);
+      yield put({ type: 'onBatchDeleteEmployee', status: Constant.ActionStatus.Success, payload: { employees: response } });
+    },
+
+    * createEmployee({ payload }, { call, put }) {
+      yield put({ type: 'onCreateEmployee', payload: payload });
+      const response = yield call(createEmployee, payload.city, payload.employee);
+      yield put({ type: 'onCreateEmployee', status: Constant.ActionStatus.Success, payload: { employee: response } });
+    },
+
+    * updateEmployee({ payload }, { call, put }) {
+      yield put({ type: 'onUpdateEmployee', payload: payload });
+      const response = yield call(updateEmployee, payload.employee);
+      yield put({ type: 'onUpdateEmployee', status: Constant.ActionStatus.Success, payload: { employee: response } });
+    },
+
+    * toggleActiveEmployee({ payload }, { call, put }) {
+      yield put({ type: 'onToggleActiveEmployee', payload: payload });
+    },
+
+    * activeEmployeeFieldsChange({ payload }, { call, put }) {
+      yield put({ type: 'onActiveEmployeeFieldsChange', payload: payload });
+    },
+
   },
 
   reducers: {
@@ -92,7 +102,7 @@ export default {
         activeCity: action.payload.city,
       };
     },
-    onList(state, action) {
+    onListEmployee(state, action) {
       switch (action.status) {
         case Constant.ActionStatus.Success:
           return {
@@ -109,13 +119,13 @@ export default {
           };
       }
     },
-    onCreate(state, action) {
+    onCreateEmployee(state, action) {
       switch (action.status) {
         case Constant.ActionStatus.Success:
           return {
             ...state,
             activeEmployee: undefined,
-            isUpdatingEmployees: false,
+            updatingEmployeeUids: state.updatingEmployeeUids.filter(uid => (uid !== 0)),
             employees: [
               action.payload.employee,
               ...state.employees,
@@ -124,17 +134,17 @@ export default {
         default:
           return {
             ...state,
-            isUpdatingEmployees: true,
+            updatingEmployeeUids: [0, ...state.updatingEmployeeUids],
           };
       }
     },
-    onUpdate(state, action) {
+    onUpdateEmployee(state, action) {
       switch (action.status) {
         case Constant.ActionStatus.Success:
           return {
             ...state,
-            isUpdatingEmployees: false,
             activeEmployee: undefined,
+            updatingEmployeeUids: state.updatingEmployeeUids.filter(uid => (uid !== action.payload.employee.uid)),
             employees: state.employees.map((employee) => {
               return employee.uid === action.payload.employee.uid ? action.payload.employee : employee;
             }),
@@ -142,19 +152,16 @@ export default {
         default:
           return {
             ...state,
-            isUpdatingEmployees: true,
+            updatingEmployeeUids: [action.payload.employee.uid, ...state.updatingEmployeeUids],
           };
       }
     },
-    onDelete(state, action) {
+    onDeleteEmployee(state, action) {
       switch (action.status) {
         case Constant.ActionStatus.Success:
           return {
             ...state,
-            updatingEmployeeUids: state.updatingEmployeeUids.filter((employee) => {
-              return employee.uid !== action.payload.employee.uid;
-            }),
-            isUpdatingEmployees: false,
+            updatingEmployeeUids: state.updatingEmployeeUids.filter(uid => (uid !== action.payload.employee.uid)),
             employees: state.employees.filter((employee) => {
               return employee.uid !== action.payload.employee.uid;
             }),
@@ -163,11 +170,10 @@ export default {
           return {
             ...state,
             updatingEmployeeUids: [action.payload.employee.uid, ...state.updatingEmployeeUids],
-            isUpdatingEmployees: true,
           };
       }
     },
-    onBatchDelete(state, action) {
+    onBatchDeleteEmployee(state, action) {
       let employeeUids = action.payload.employees.map((employee) => {
         return employee.uid;
       });
@@ -175,7 +181,6 @@ export default {
         case Constant.ActionStatus.Success:
           return {
             ...state,
-            isUpdatingEmployees: false,
             updatingEmployeeUids: state.updatingEmployeeUids.filter((employeeUid) => {
               return !employeeUids.includes(employeeUid);
             }),
@@ -190,16 +195,14 @@ export default {
               ...employeeUids,
               state.updatingEmployeeUids,
             ],
-            isUpdatingEmployees: true,
           };
       }
     },
-    onUploadAvatar(state, action) {
+    onUploadEmployeeAvatar(state, action) {
       let avatarInfo = action.payload.info;
       if (avatarInfo.file.status === 'uploading') {
         return {
           ...state,
-          isUpdatingEmployees: true,
           updatingEmployeeUids: [...state.updatingEmployeeUids, action.payload.employee.uid],
         };
       } else if (avatarInfo.file.status === 'done') {
@@ -208,10 +211,7 @@ export default {
           employees: state.employees.map((employee) => {
             return employee.uid === avatarInfo.file.response.uid ? avatarInfo.file.response : employee;
           }),
-          isUpdatingEmployees: false,
-          updatingEmployeeUids: state.employees.filter((employee) => {
-            return employee.uid !== action.payload.employee.uid;
-          }),
+          updatingEmployeeUids: state.updatingEmployeeUids.filter(uid => (uid !== action.payload.employee.uid)),
         };
       } else if (avatarInfo.file.status === 'error') {
         notification['error']({
@@ -220,16 +220,13 @@ export default {
         });
         return {
           ...state,
-          isUpdatingEmployees: false,
-          updatingEmployeeUids: state.employees.filter((employee) => {
-            return employee.uid !== action.payload.employee.uid;
-          }),
+          updatingEmployeeUids: state.updatingEmployeeUids.filter(uid => (uid !== action.payload.employee.uid)),
         };
       } else {
         return state;
       }
     },
-    onUploadList(state, action) {
+    onUploadEmployeeList(state, action) {
       let employeeListInfo = action.payload.info;
       if (employeeListInfo.file.status === 'uploading') {
         return {
@@ -258,15 +255,44 @@ export default {
         };
       }
     },
-    onCheckChanged(state, action) {
+    onToggleCheck(state, action) {
       return {
         ...state,
         employees: state.employees.map((employee) => {
           if (employee.uid === action.payload.employee.uid) {
-            employee.isChecked = action.payload.checked;
+            employee.isChecked = action.payload.checkbox.checked;
           }
           return employee;
         }),
+      };
+    },
+    onToggleCheckAll(state, action) {
+      return {
+        ...state,
+        employees: state.employees.map((employee) => {
+          employee.isChecked = action.payload.checked;
+          return employee;
+        }),
+      };
+    },
+    onToggleActiveEmployee(state, action) {
+      return {
+        ...state,
+        activeEmployee: action.payload.employee,
+      };
+    },
+    onActiveEmployeeFieldsChange(state, action) {
+      let changedFieldObject = {};
+      Object.keys(action.payload.changedFields).forEach((key) => {
+        changedFieldObject[key] = action.payload.changedFields[key].value;
+      });
+
+      return {
+        ...state,
+        activeEmployee: {
+          ...state.activeEmployee,
+          ...changedFieldObject,
+        },
       };
     },
   },
