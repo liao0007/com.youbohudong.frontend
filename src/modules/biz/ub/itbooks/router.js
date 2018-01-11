@@ -2,13 +2,12 @@ import React from 'react';
 import { Router, Route, Switch } from 'dva/router';
 import { Spin } from 'antd';
 import dynamic from 'dva/dynamic';
-import { getRouterData } from './common/router';
 import onError from './error';
 import styles from './index.less';
-import { connect } from 'dva';
+import NotFound from './routes/Exception/404';
 
 dynamic.setDefaultLoadingComponent(() => {
-  return <Spin size="large" className={styles.globalSpin} />;
+  return <Spin size="large" className={styles.globalSpin}/>;
 });
 
 function RouterConfig({ history, app, match }) {
@@ -18,17 +17,19 @@ function RouterConfig({ history, app, match }) {
   }
   app.onError = onError;
 
-  const routerData = getRouterData(app, match.path);
-  const BasicLayout = routerData[`${match.path}/`].component;
-  const UserLayout = routerData[`${match.path}/user`].component;
+  const CardListPage = dynamic({
+    app,
+    models: () => [import('./models/user'), import('./models/book')],
+    component: () => import('./routes/CardList'),
+  });
 
   return (
-    <Router history={history} >
-      <Switch >
-        <Route path={`${match.path}/`} render={props => <BasicLayout {...props} />} />
-        <Route path={`${match.path}/user`} render={props => <UserLayout {...props} />} />
-      </Switch >
-    </Router >
+    <Router history={history}>
+      <Switch>
+        <Route path={`${match.path}/:activeCategory/:activeSubcategory`} render={props => <CardListPage {...props} routeRootPath={match.path + "/"}/>}/>
+        <Route render={NotFound}/>
+      </Switch>
+    </Router>
   );
 }
 

@@ -17,20 +17,20 @@ class TaskListPage extends Component {
     const { list, isLoading } = this.props.task;
 
     return (
-      <div className="flex-container" >
-        <ActivityIndicator toast text="加载中..." animating={isLoading} />
-        <List renderHeader={() => '活动列表'} className={styles.taskList} >
+      <div className="flex-container">
+        <ActivityIndicator toast text="加载中..." animating={isLoading}/>
+        <List renderHeader={() => '活动列表'} className={styles.taskList}>
           {list && list.map((item) => (
-            <Item key={item.key} arrow="horizontal" thumb={item.thumbnail} multipleLine >
-              <Link to={{ pathname: `${this.props.match.url}/${item.key}`, }} >
-                <div >
-                  {item.name} <Brief >{item.brief}</Brief >
-                </div >
-              </Link >
-            </Item >
+            <Item key={item.key} arrow="horizontal" thumb={item.thumbnail} multipleLine>
+              <Link to={{ pathname: `${this.props.match.url}/${item.key}`, }}>
+                <div>
+                  {item.name} <Brief>{item.brief}</Brief>
+                </div>
+              </Link>
+            </Item>
           ))}
-        </List >
-      </div >
+        </List>
+      </div>
     );
   }
 }

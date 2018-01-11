@@ -17,10 +17,12 @@ export default class SiderMenu extends PureComponent {
   getDefaultCollapsedSubMenus(props) {
     const { location: { pathname } } = props || this.props;
     const snippets = pathname.split('/').slice(1, -1);
+
     const currentPathSnippets = snippets.map((item, index) => {
       const arr = snippets.filter((_, i) => i <= index);
       return arr.join('/');
     });
+
     let currentMenuSelectedKeys = [];
     currentPathSnippets.forEach((item) => {
       currentMenuSelectedKeys = currentMenuSelectedKeys.concat(
@@ -33,21 +35,18 @@ export default class SiderMenu extends PureComponent {
   }
 
   getFlatMenuKeys(menus) {
-    let keys = [];
-    menus.forEach((item) => {
-      if (item.children) {
-        keys.push(item.path);
-        keys = keys.concat(this.getFlatMenuKeys(item.children));
-      } else {
-        keys.push(item.path);
-      }
-    });
-    return keys;
+    return menus.reduce((accumulator, menu) => menu.children ? [
+      ...accumulator,
+      menu.path,
+      ...this.getFlatMenuKeys(menu.children),
+    ] : [
+      ...accumulator,
+      menu.path,
+    ], []);
   }
 
   getSelectedMenuKeys = (path) => {
     const flatMenuKeys = this.getFlatMenuKeys(this.props.menus);
-
     if (flatMenuKeys.indexOf(path.replace(/^\//, '')) > -1) {
       return [path.replace(/^\//, '')];
     }
@@ -62,67 +61,45 @@ export default class SiderMenu extends PureComponent {
   };
 
   getNavMenuItems(menusData) {
-    if (!menusData) {
-      return [];
-    }
     return menusData.map((item) => {
       if (!item.name) {
         return null;
       }
-      let itemPath;
-      if (item.path && item.path.indexOf('http') === 0) {
-        itemPath = item.path;
-      } else {
-        itemPath = `/${item.path || ''}`.replace(/\/+/g, '/');
-      }
-      if (item.children && item.children.some(child => child.name)) {
-        return item.hideInMenu ? null : (
-          <SubMenu
-            title={
-              item.icon ? (
-                <span >
-                    <Icon type={item.icon} />
-                    <span >{item.name}</span >
-                  </span >
-              ) : item.name
+      const itemPath = item.path && item.path.indexOf('http') === 0 ? item.path : `/${item.path || ''}`.replace(/\/+/g, '/');
+      const icon = item.icon && <Icon type={item.icon}/>;
+      return item.children ? (item.hideInMenu ? null : (
+        <SubMenu
+          title={item.icon ? <span>{icon}<span>{item.name}</span></span> : item.name}
+          key={item.key || item.path}
+        >
+          {this.getNavMenuItems(item.children)}
+        </SubMenu>
+      )) : (item.hideInMenu ? null : (
+          <Menu.Item key={item.key || item.path}>
+            {
+              /^https?:\/\//.test(itemPath) ? (
+                <a href={itemPath} target={item.target}>{icon}<span>{item.name}</span></a>
+              ) : (
+                <Link
+                  to={itemPath}
+                  target={item.target}
+                  replace={itemPath === this.props.location.pathname}
+                  onClick={this.props.isMobile &&
+                  (() => { this.props.onCollapse(true); })}
+                >
+                  {icon}<span>{item.name}</span>
+                </Link>
+              )
             }
-            key={item.key || item.path}
-          >
-            {this.getNavMenuItems(item.children)}
-          </SubMenu >
-        );
-      }
-      const icon = item.icon && <Icon type={item.icon} />;
-      return item.hideInMenu ? null : (
-        <Menu.Item key={item.key || item.path} >
-          {
-            /^https?:\/\//.test(itemPath) ? (
-              <a href={itemPath} target={item.target} >
-                {icon}<span >{item.name}</span >
-              </a >
-            ) : (
-              <Link
-                to={itemPath}
-                target={item.target}
-                replace={itemPath === this.props.location.pathname}
-                onClick={this.props.isMobile &&
-                (() => { this.props.onCollapse(true); })}
-              >
-                {icon}<span >{item.name}</span >
-              </Link >
-            )
-          }
-        </Menu.Item >
+          </Menu.Item>
+        )
       );
     });
   }
 
   handleOpenChange = (openKeys) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
-    const isMainMenu = this.props.menus.some(
-      item => lastOpenKey &&
-        (item.key === lastOpenKey || item.path === lastOpenKey),
-    );
+    const isMainMenu = this.props.menus.some(item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey));
     this.setState({
       openKeys: isMainMenu ? [lastOpenKey] : [...openKeys],
     });
@@ -130,6 +107,7 @@ export default class SiderMenu extends PureComponent {
 
   render() {
     const { collapsed, location: { pathname }, onCollapse } = this.props;
+    console.log(this.props.match)
     // Don't show popup menu when it is been collapsed
     const menuProps = collapsed ? {} : {
       openKeys: this.state.openKeys,
@@ -144,12 +122,12 @@ export default class SiderMenu extends PureComponent {
         width={256}
         className={styles.sider}
       >
-        <div className={styles.logo} >
-          <Link to={this.props.logoLink || "/"} >
-            <img src={this.props.logo} alt="logo" />
-            <h1 >{this.props.title}</h1 >
-          </Link >
-        </div >
+        <div className={styles.logo}>
+          <Link to={this.props.logoLink || '/'}>
+            <img src={this.props.logo} alt="logo"/>
+            <h1>{this.props.title}</h1>
+          </Link>
+        </div>
         <Menu
           theme="dark"
           mode="inline"
@@ -159,8 +137,8 @@ export default class SiderMenu extends PureComponent {
           style={{ padding: '16px 0', width: '100%' }}
         >
           {this.getNavMenuItems(this.props.menus)}
-        </Menu >
-      </Sider >
+        </Menu>
+      </Sider>
     );
   }
 }

@@ -8,11 +8,11 @@ export default ({ app, history, match }) => {
   const UBModule = dynamic({ app, component: () => import('./ub/router'), });
 
   return (
-    <Router history={history} >
-      <Switch >
-        <Route path={`${match.path}/vip`} render={(props) => <VIPModule {...props} app={app} />} />
-        <Route path={`${match.path}/ub`} render={(props) => <UBModule {...props} app={app} />} />
-      </Switch >
-    </Router >
+    <Router history={history}>
+      <Switch>
+        <Route path={`${match.path}/vip`} render={(props) => <VIPModule {...props} app={app}/>}/>
+        <Route path={`${match.path}/ub`} render={(props) => <UBModule {...props} app={app}/>}/>
+      </Switch>
+    </Router>
   );
 };

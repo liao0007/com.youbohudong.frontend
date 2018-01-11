@@ -7,12 +7,12 @@ import onError from './error';
 import styles from './index.less';
 
 dynamic.setDefaultLoadingComponent(() => {
-  return <Spin size="large" className={styles.globalSpin} />;
+  return <Spin size="large" className={styles.globalSpin}/>;
 });
 
 function RouterConfig({ history, app, match }) {
-  if(!app._models.some(({namespace}) => namespace === "global")) {
-    app.model(require('./models/global'))
+  if (!app._models.some(({ namespace }) => namespace === 'global')) {
+    app.model(require('./models/global'));
   }
   app.onError = onError;
 
@@ -21,12 +21,12 @@ function RouterConfig({ history, app, match }) {
   const UserLayout = routerData[`${match.path}/user`].component;
 
   return (
-    <Router history={history} >
-      <Switch >
-        <Route path={`${match.path}/`} render={props => <BasicLayout {...props} />} />
-        <Route path={`${match.path}/user`} render={props => <UserLayout {...props} />} />
-      </Switch >
-    </Router >
+    <Router history={history}>
+      <Switch>
+        <Route path={`${match.path}/`} render={props => <BasicLayout {...props} />}/>
+        <Route path={`${match.path}/user`} render={props => <UserLayout {...props} />}/>
+      </Switch>
+    </Router>
   );
 }
 

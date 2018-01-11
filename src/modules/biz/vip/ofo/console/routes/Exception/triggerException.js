@@ -37,17 +37,17 @@ export default class TriggerException extends PureComponent {
 
   render() {
     return (
-      <Spin spinning={this.state.isloading} wrapperClassName={styles.trigger} >
-        <Button type="danger" onClick={this.trigger403} >
+      <Spin spinning={this.state.isloading} wrapperClassName={styles.trigger}>
+        <Button type="danger" onClick={this.trigger403}>
           触发403
-        </Button >
-        <Button type="danger" onClick={this.trigger500} >
+        </Button>
+        <Button type="danger" onClick={this.trigger500}>
           触发500
-        </Button >
-        <Button type="danger" onClick={this.trigger404} >
+        </Button>
+        <Button type="danger" onClick={this.trigger404}>
           触发404
-        </Button >
-      </Spin >
+        </Button>
+      </Spin>
     );
   }
 }

@@ -13,11 +13,11 @@ export default ({ app, history, match }) => {
   });
 
   return (
-    <Router history={history} >
-      <Switch >
-        <Route exact path={`${match.path}/:taskId`} render={(props) => <HomePage {...props} app={app} />} />
-        <Route path={`${match.path}`} render={(props) => <HomePage {...props} app={app} />} />
-      </Switch >
-    </Router >
+    <Router history={history}>
+      <Switch>
+        <Route exact path={`${match.path}/:taskId`} render={(props) => <HomePage {...props} app={app}/>}/>
+        <Route path={`${match.path}`} render={(props) => <HomePage {...props} app={app}/>}/>
+      </Switch>
+    </Router>
   );
 };

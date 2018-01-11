@@ -8,11 +8,11 @@ export default ({ app, history, match }) => {
   const OFOModule = dynamic({ app, component: () => import('./ofo/router'), });
 
   return (
-    <Router history={history} >
-      <Switch >
-        <Route path={`${match.path}/kfc`} render={(props) => <KFCModule {...props} app={app} />} />
-        <Route path={`${match.path}/ofo`} render={(props) => <OFOModule {...props} app={app} />} />
-      </Switch >
-    </Router >
+    <Router history={history}>
+      <Switch>
+        <Route path={`${match.path}/kfc`} render={(props) => <KFCModule {...props} app={app}/>}/>
+        <Route path={`${match.path}/ofo`} render={(props) => <OFOModule {...props} app={app}/>}/>
+      </Switch>
+    </Router>
   );
 };

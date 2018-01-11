@@ -9,7 +9,7 @@ export default {
   },
 
   effects: {
-    * login({payload}, {call, put}) {
+    * login({ payload }, { call, put }) {
       yield put({
         type: 'changeSubmitting',
         payload: true,
@@ -24,7 +24,7 @@ export default {
         yield put(routerRedux.push('/'));
       }
     },
-    * logout(_, {put}) {
+    * logout(_, { put }) {
       yield put({
         type: 'changeLoginStatus',
         payload: {
@@ -36,7 +36,7 @@ export default {
   },
 
   reducers: {
-    changeLoginStatus(state, {payload}) {
+    changeLoginStatus(state, { payload }) {
       return {
         ...state,
         status: payload.status,
@@ -44,7 +44,7 @@ export default {
         submitting: false,
       };
     },
-    changeSubmitting(state, {payload}) {
+    changeSubmitting(state, { payload }) {
       return {
         ...state,
         submitting: payload,

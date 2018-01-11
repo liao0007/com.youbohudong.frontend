@@ -87,28 +87,28 @@ class HomePage extends Component {
         overflow: 'hidden',
         position: 'relative',
         backgroundColor: '#FFD856',
-      }} >
-        <ActivityIndicator toast text="加载中..." animating={isUpdatingInfo} />
+      }}>
+        <ActivityIndicator toast text="加载中..." animating={isUpdatingInfo}/>
         <img style={{ width: '100%', height: '100%', position: 'absolute' }} src={background}
-             alt="" />
+             alt=""/>
 
         {/*header pictures*/}
-        <div style={{ height: '30%', width: '100%', position: 'absolute' }} >
-          <img style={{ height: '100%', margin: '0 auto', display: 'block' }} src={giant} alt="" />
-        </div >
+        <div style={{ height: '30%', width: '100%', position: 'absolute' }}>
+          <img style={{ height: '100%', margin: '0 auto', display: 'block' }} src={giant} alt=""/>
+        </div>
 
         {/*main content*/}
-        <div style={{ height: '60%', width: '100%', position: 'absolute', top: '30%' }} >
+        <div style={{ height: '60%', width: '100%', position: 'absolute', top: '30%' }}>
           {/*border*/}
           <img style={{
             width: '100%',
             height: '100%',
             display: 'block',
             position: 'absolute',
-          }} src={border} alt="" />
+          }} src={border} alt=""/>
 
           {/*inner content*/}
-          <div style={{ height: '100%', width: '100%', position: 'absolute' }} >
+          <div style={{ height: '100%', width: '100%', position: 'absolute' }}>
             {/*task briefing*/}
             <div style={{
               height: '30%',
@@ -116,22 +116,22 @@ class HomePage extends Component {
               padding: 23,
               overflow: 'hidden',
               fontSize: Math.floor(window.innerWidth / 414 * 13),
-            }} >
+            }}>
               {
                 Object.keys(tasks).map((taskKey) => {
                   let task = tasks[taskKey];
-                  return activeTask && activeTask.id === task.id ? <p style={{ color: '#333' }} key={task.id} >
+                  return activeTask && activeTask.id === task.id ? <p style={{ color: '#333' }} key={task.id}>
                     {task.brief}
-                  </p > : null;
+                  </p> : null;
                 })
               }
-              <p style={{ color: '#666' }} >
+              <p style={{ color: '#666' }}>
                 *集齐主题卡片，有机会获得珍藏手机钥匙链。22日前收集完成全部卡片，更有机会于12月22日15:00-17:00赴劝业场餐厅参加金色巨人圣诞狂欢活动。
-              </p >
-            </div >
+              </p>
+            </div>
 
             {/*cards*/}
-            <div style={{ width: '100%', height: '60%', position: 'absolute', top: '30%' }} >
+            <div style={{ width: '100%', height: '60%', position: 'absolute', top: '30%' }}>
               {/* main card */}
               <TweenOne
                 animation={{ left: 5, yoyo: true, repeat: -1, duration: 1000 }}
@@ -144,13 +144,13 @@ class HomePage extends Component {
                     let style = taskInfos && taskInfos[task.id] && taskInfos[task.id].isTaskCompleted
                       ? cardStyle
                       : { ...cardStyle, ...styles.greyOut };
-                    return activeTask && activeTask.id === task.id ? <img key={task.id} style={style} src={task.couponImage} alt="" /> : null;
+                    return activeTask && activeTask.id === task.id ? <img key={task.id} style={style} src={task.couponImage} alt=""/> : null;
                   })
                 }
-              </TweenOne >
+              </TweenOne>
 
               {/* cards */}
-              <div style={{ width: '20%', height: '100%', position: 'absolute', left: '50%' }} >
+              <div style={{ width: '20%', height: '100%', position: 'absolute', left: '50%' }}>
                 {
                   Object.keys(tasks).map((taskKey, index) => {
                     let task = tasks[taskKey];
@@ -166,10 +166,10 @@ class HomePage extends Component {
                     return <img key={index} style={style} src={task.couponImage} alt=""
                                 onClick={(e) => {
                                   this.handleSelectTask(task);
-                                }} />;
+                                }}/>;
                   })
                 }
-              </div >
+              </div>
 
               {/* collect button */}
               <div style={{
@@ -178,7 +178,7 @@ class HomePage extends Component {
                 position: 'absolute',
                 left: '70%',
                 paddingRight: 25,
-              }} >
+              }}>
                 {
                   Object.keys(tasks).map((taskKey, index) => {
                     let task = tasks[taskKey];
@@ -192,24 +192,24 @@ class HomePage extends Component {
                       marginTop: 5,
                       color: '#666',
                       textAlign: 'center',
-                    }} >
+                    }}>
                       {
                         taskInfos && taskInfos[task.id] && taskInfos[task.id].isTaskCompleted && !taskInfos[task.id].isCouponCollected ?
                           <img key={index} style={{ ...originalStyle, ...styles.active }} alt=""
                                src={button1_active}
                                onClick={(e) => {
                                  this.handleShowCouponModal(task);
-                               }} /> : taskInfos && taskInfos[task.id] && taskInfos[task.id].isTaskCompleted && taskInfos[task.id].isCouponCollected ?
+                               }}/> : taskInfos && taskInfos[task.id] && taskInfos[task.id].isTaskCompleted && taskInfos[task.id].isCouponCollected ?
                           <img key={index} style={{ ...originalStyle }} alt=""
-                               src={button1_visited} /> : <img key={index} style={{ ...originalStyle }} src={button1_inactive}
-                                                               alt="" />
+                               src={button1_visited}/> : <img key={index} style={{ ...originalStyle }} src={button1_inactive}
+                                                              alt=""/>
                       }
-                    </div >;
+                    </div>;
 
                   })
                 }
-              </div >
-            </div >
+              </div>
+            </div>
 
             {/* grand button */}
             <div style={{
@@ -219,21 +219,21 @@ class HomePage extends Component {
               top: '92%',
               textAlign: 'center',
               paddingLeft: 10,
-            }} >
+            }}>
               {
                 userInfo.isGrandPrizeRolled === true ? <img style={{ height: '100%', zHomePage: 99 }}
-                                                            src={button2_visited} alt="" /> : userInfo.isGrandPrizeRolled === false ?
+                                                            src={button2_visited} alt=""/> : userInfo.isGrandPrizeRolled === false ?
                   <img style={{ height: '100%', zHomePage: 99, ...styles.active }} src={button2_active}
-                       onClick={(e) => this.handleShowGrandModal()} alt="" /> :
-                  <img style={{ height: '100%', zHomePage: 99 }} src={button2_inactive} alt="" />
+                       onClick={(e) => this.handleShowGrandModal()} alt=""/> :
+                  <img style={{ height: '100%', zHomePage: 99 }} src={button2_inactive} alt=""/>
               }
-            </div >
+            </div>
 
-          </div >
-        </div >
+          </div>
+        </div>
 
         {/* footer */}
-        <div style={{ height: '10%', width: '100%', position: 'absolute', top: '90%' }} >
+        <div style={{ height: '10%', width: '100%', position: 'absolute', top: '90%' }}>
           <img style={{
             height: '80%',
             position: 'absolute',
@@ -242,12 +242,12 @@ class HomePage extends Component {
             cursor: 'pointer',
             zHomePage: 99,
           }}
-               src={button3} onClick={(e) => this.handleScan()} alt="" />
+               src={button3} onClick={(e) => this.handleScan()} alt=""/>
 
           <img style={{ width: '20%', position: 'absolute', left: '-4%', bottom: '-4%', opacity: 0.8 }}
-               src={ray} alt="" />
-          <img style={{ width: '20%', position: 'absolute', left: 0, bottom: 0 }} src={treasure_box} alt="" />
-        </div >
+               src={ray} alt=""/>
+          <img style={{ width: '20%', position: 'absolute', left: 0, bottom: 0 }} src={treasure_box} alt=""/>
+        </div>
 
         {/*coupon modal*/}
         <Modal
@@ -258,18 +258,18 @@ class HomePage extends Component {
               text: '分享领取', onPress: () => this.handleCollectCoupon(this.state.udid, activeTask),
             }]}
         >
-          <div >
+          <div>
             {
-              <div >
+              <div>
                 <img src={coupon} style={{ width: 100, display: 'block', margin: '10px auto' }}
-                     alt="" />
-                <p >{activeTask ? activeTask.shareTitle : ''}<br />
-                  <span style={{ fontSize: '80%' }} >*限2017年12月1-31日使用</span >
-                </p >
-              </div >
+                     alt=""/>
+                <p>{activeTask ? activeTask.shareTitle : ''}<br/>
+                  <span style={{ fontSize: '80%' }}>*限2017年12月1-31日使用</span>
+                </p>
+              </div>
             }
-          </div >
-        </Modal >
+          </div>
+        </Modal>
 
         {/*roll grand prize modal*/}
         <Modal
@@ -280,17 +280,17 @@ class HomePage extends Component {
               text: '试试手气', onPress: (e) => this.handleRollGrandPrize(this.state.udid),
             }]}
         >
-          <div >
+          <div>
             {
-              <div >
+              <div>
                 <img src={grand_box} style={{ width: 200, display: 'block', margin: '10px auto' }}
-                     alt="" />
-                <p >开启宝箱有机会获得肯德基金色圣诞季珍藏手机钥匙链。<br /><span style={{ fontSize: '80%' }} >*22日前开启宝箱更有机会于12月22日15:00-17:00赴劝业场餐厅参加金色巨人圣诞狂欢活动。</span >
-                </p >
-              </div >
+                     alt=""/>
+                <p>开启宝箱有机会获得肯德基金色圣诞季珍藏手机钥匙链。<br/><span style={{ fontSize: '80%' }}>*22日前开启宝箱更有机会于12月22日15:00-17:00赴劝业场餐厅参加金色巨人圣诞狂欢活动。</span>
+                </p>
+              </div>
             }
-          </div >
-        </Modal >
+          </div>
+        </Modal>
 
         {/* grand prize modal 参与奖 */}
         <Modal
@@ -301,16 +301,16 @@ class HomePage extends Component {
               text: '分享领取', onPress: (e) => this.handleCollectGrandPrize(this.state.udid),
             }]}
         >
-          <div >
+          <div>
             {
-              <div >
+              <div>
                 <img src={burger} style={{ width: 200, display: 'block', margin: '10px auto' }}
-                     alt="" />
-                <p >香辣鸡腿堡第二份半价券<br /><span style={{ fontSize: '80%' }} >*限2017年12月1-31日使用</span ></p >
-              </div >
+                     alt=""/>
+                <p>香辣鸡腿堡第二份半价券<br/><span style={{ fontSize: '80%' }}>*限2017年12月1-31日使用</span></p>
+              </div>
             }
-          </div >
-        </Modal >
+          </div>
+        </Modal>
 
         {/* grand prize modal 大奖 */}
         <Modal
@@ -322,37 +322,37 @@ class HomePage extends Component {
             }]}
         >
           {
-            <div >
-              <Flex >
-                <Flex.Item style={{ flex: 1 }} >
-                  <img src={keyring} style={{ width: '100%' }} alt="" />
-                </Flex.Item >
-                <Flex.Item style={{ flex: 4 }} >
-                  <h2 >恭喜您获得肯德基金色圣诞季珍藏手机钥匙链！</h2 >
-                </Flex.Item >
-              </Flex >
-              <WhiteSpace size="lg" />
-              <Flex >
-                <Flex.Item >
-                  <p >请于<span style={{ fontWeight: 'bold' }} >12月25日至12月31日</span >，赴<span style={{ fontWeight: 'bold' }} >肯德基天河城餐厅</span >凭此页面和手机号码领取奖品！
-                  </p >
+            <div>
+              <Flex>
+                <Flex.Item style={{ flex: 1 }}>
+                  <img src={keyring} style={{ width: '100%' }} alt=""/>
+                </Flex.Item>
+                <Flex.Item style={{ flex: 4 }}>
+                  <h2>恭喜您获得肯德基金色圣诞季珍藏手机钥匙链！</h2>
+                </Flex.Item>
+              </Flex>
+              <WhiteSpace size="lg"/>
+              <Flex>
+                <Flex.Item>
+                  <p>请于<span style={{ fontWeight: 'bold' }}>12月25日至12月31日</span>，赴<span style={{ fontWeight: 'bold' }}>肯德基天河城餐厅</span>凭此页面和手机号码领取奖品！
+                  </p>
                   <input
                     disabled={userInfo.isUserInfoUpdated}
                     style={{ border: '1px solid #999', padding: 5, width: '100%' }} type="text"
                     placeholder="请留下手机号码，凭此领奖" value={userInfo.mobile}
-                    onChange={(e) => this.handleMobileChanged(e)} />
+                    onChange={(e) => this.handleMobileChanged(e)}/>
                   <AgreeItem disabled={userInfo.isUserInfoUpdated}
                              onChange={(e) => this.handleIsJoinOfflineEventChanged(e)}
-                             defaultChecked={userInfo.isJoinOfflineEvent} >
-                    <span >我希望参加圣诞狂欢活动</span >
-                  </AgreeItem >
-                </Flex.Item >
-              </Flex >
-            </div >
+                             defaultChecked={userInfo.isJoinOfflineEvent}>
+                    <span>我希望参加圣诞狂欢活动</span>
+                  </AgreeItem>
+                </Flex.Item>
+              </Flex>
+            </div>
           }
-        </Modal >
+        </Modal>
 
-      </div >
+      </div>
 
     );
   }

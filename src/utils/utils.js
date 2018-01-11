@@ -112,8 +112,7 @@ function getRelation(str1, str2) {
 }
 
 export function getRoutes(path, routerData) {
-  let routes = Object.keys(routerData).filter(routePath =>
-    routePath.indexOf(path) === 0 && routePath !== path);
+  let routes = Object.keys(routerData).filter(routePath => routePath.indexOf(path) === 0 && routePath !== path);
   routes = routes.map(item => item.replace(path, ''));
   let renderArr = [];
   renderArr.push(routes[0]);
@@ -125,7 +124,7 @@ export function getRoutes(path, routerData) {
       renderArr.push(routes[i]);
     }
   }
-  return renderArr.map((item) => {
+  const t =  renderArr.map((item) => {
     const exact = !routes.some(
       route => route !== item && getRelation(route, item) === 1);
     return {
@@ -135,4 +134,6 @@ export function getRoutes(path, routerData) {
       exact,
     };
   });
+  console.log(t)
+  return t;
 }

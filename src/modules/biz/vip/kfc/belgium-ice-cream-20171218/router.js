@@ -7,10 +7,10 @@ export default ({ app, history, match }) => {
   const HomePage = dynamic({ app, component: () => import('./routes/HomePage'), });
 
   return (
-    <Router history={history} >
-      <Switch >
-        <Route exact path={`${match.path}`} render={(props) => <HomePage {...props} app={app} />} />
-      </Switch >
-    </Router >
+    <Router history={history}>
+      <Switch>
+        <Route exact path={`${match.path}`} render={(props) => <HomePage {...props} app={app}/>}/>
+      </Switch>
+    </Router>
   );
 };

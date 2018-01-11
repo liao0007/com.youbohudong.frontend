@@ -106,7 +106,7 @@ class BasicLayout extends React.PureComponent {
     formattedMenuData.forEach(getRedirect);
 
     const layout = (
-      <Layout >
+      <Layout>
         <SiderMenu
           collapsed={collapsed}
           location={location}
@@ -114,10 +114,10 @@ class BasicLayout extends React.PureComponent {
           isMobile={this.state.isMobile}
           menus={formattedMenuData}
           logo={logo}
-          logoLink={"/biz/vip/ofo/console"}
+          logoLink={'/biz/vip/ofo/console'}
           title={'OFO小黄车'}
         />
-        <Layout >
+        <Layout>
           <GlobalHeader
             currentUser={currentUser}
             fetchingNotices={fetchingNotices}
@@ -126,15 +126,15 @@ class BasicLayout extends React.PureComponent {
             dispatch={dispatch}
             isMobile={this.state.isMobile}
             logo={logo}
-            logoLink={"/biz/vip/ofo/console"}
+            logoLink={'/biz/vip/ofo/console'}
           />
-          <Content style={{ margin: '24px 24px 0', height: '100%' }} >
-            <div style={{ minHeight: 'calc(100vh - 260px)' }} >
-              <Switch >
+          <Content style={{ margin: '24px 24px 0', height: '100%' }}>
+            <div style={{ minHeight: 'calc(100vh - 260px)' }}>
+              <Switch>
                 {
                   redirectData.map(item =>
                     <Redirect key={item.from} exact from={item.from}
-                              to={item.to} />,
+                              to={item.to}/>,
                   )
                 }
                 {
@@ -147,10 +147,10 @@ class BasicLayout extends React.PureComponent {
                     />
                   ))
                 }
-                <Redirect exact from="/" to="/dashboard/analysis" />
-                <Route render={NotFound} />
-              </Switch >
-            </div >
+                <Redirect exact from="/" to="/dashboard/analysis"/>
+                <Route render={NotFound}/>
+              </Switch>
+            </div>
             <GlobalFooter
               links={[
                 {
@@ -167,22 +167,22 @@ class BasicLayout extends React.PureComponent {
                   blankTarget: true,
                 }]}
               copyright={
-                <div >
-                  Copyright <Icon type="copyright" /> 2017 蚂蚁金服体验技术部出品
-                </div >
+                <div>
+                  Copyright <Icon type="copyright"/> 2017 蚂蚁金服体验技术部出品
+                </div>
               }
             />
-          </Content >
-        </Layout >
-      </Layout >
+          </Content>
+        </Layout>
+      </Layout>
     );
 
     return (
-      <DocumentTitle title={this.getPageTitle()} >
-        <ContainerQuery query={query} >
-          {params => <div className={classNames(params)} >{layout}</div >}
-        </ContainerQuery >
-      </DocumentTitle >
+      <DocumentTitle title={this.getPageTitle()}>
+        <ContainerQuery query={query}>
+          {params => <div className={classNames(params)}>{layout}</div>}
+        </ContainerQuery>
+      </DocumentTitle>
     );
   }
 }

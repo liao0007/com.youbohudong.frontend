@@ -35,40 +35,40 @@ const WrappedInfoForm = Form.create({
   },
 })((props) => {
   const { getFieldDecorator } = props.form;
-  return <Form onSubmit={props.onSubmit} >
+  return <Form onSubmit={props.onSubmit}>
 
-    <FormItem label="工号" >
+    <FormItem label="工号">
       {getFieldDecorator('workId', {
         rules: [{ required: true }],
       })(
-        <Input disabled={props.uid > 0} />,
+        <Input disabled={props.uid > 0}/>,
       )}
-    </FormItem >
+    </FormItem>
 
-    <FormItem label="英文名" >
+    <FormItem label="英文名">
       {getFieldDecorator('englishName', {
         rules: [{ required: true }],
       })(
-        <Input />,
+        <Input/>,
       )}
-    </FormItem >
+    </FormItem>
 
-    <FormItem label="姓名" >
+    <FormItem label="姓名">
       {getFieldDecorator('name', {
         rules: [{ required: true }],
       })(
-        <Input />,
+        <Input/>,
       )}
-    </FormItem >
+    </FormItem>
 
-    <FormItem label="职位" >
+    <FormItem label="职位">
       {getFieldDecorator('department', {
         rules: [{ required: true }],
       })(
-        <Input />,
+        <Input/>,
       )}
-    </FormItem >
-  </Form >;
+    </FormItem>
+  </Form>;
 });
 
 class CardList extends PureComponent {
@@ -140,27 +140,27 @@ class CardList extends PureComponent {
     const { regions, activeRegion, activeCity } = this.props;
 
     const content = (
-      <div className={styles.pageHeaderContent} >
-        <p >
+      <div className={styles.pageHeaderContent}>
+        <p>
           段落示意：蚂蚁金服务设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，
           提供跨越设计与开发的体验解决方案。
-        </p >
-        <div className={styles.contentLink} >
+        </p>
+        <div className={styles.contentLink}>
           <a onClick={() => {
             window.location.href = template;
-          }} >
+          }}>
             <img alt=""
-                 src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg" /> 下载批量上传模版
-          </a >
-        </div >
-      </div >
+                 src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg"/> 下载批量上传模版
+          </a>
+        </div>
+      </div>
     );
 
     const extraContent = (
-      <div className={styles.extraImg} >
+      <div className={styles.extraImg}>
         <img alt=""
-             src="https://gw.alipayobjects.com/zos/rmsportal/RzwpdLnhmvDJToTdfDPe.png" />
-      </div >
+             src="https://gw.alipayobjects.com/zos/rmsportal/RzwpdLnhmvDJToTdfDPe.png"/>
+      </div>
     );
 
     return (
@@ -170,10 +170,10 @@ class CardList extends PureComponent {
         extraContent={extraContent}
       >
 
-        <Header style={{ background: '#ffffff', marginBottom: 24, padding: '0 24px' }} >
-          <Row >
+        <Header style={{ background: '#ffffff', marginBottom: 24, padding: '0 24px' }}>
+          <Row>
             {/*Checker */}
-            <Col span={6} push={18} style={{ textAlign: 'right' }} >
+            <Col span={6} push={18} style={{ textAlign: 'right' }}>
               <Checkbox
                 indeterminate={this.state.isIndeterminate}
                 onChange={(event) => this.props.dispatch({ type: 'badge/toggleCheckAll', payload: event.target })}
@@ -182,30 +182,30 @@ class CardList extends PureComponent {
                   marginRight: 15,
                   display: this.state.isShowCheckBox ? 'inline-block' : 'none',
                 }}
-              >全选</Checkbox >
+              >全选</Checkbox>
               <Button type={this.state.isShowCheckBox ? 'primary' : 'default'} icon="ellipsis"
-                      onClick={() => this.handleToggleShowCheckBox()} />
-            </Col >
+                      onClick={() => this.handleToggleShowCheckBox()}/>
+            </Col>
 
             {/*Buttons*/}
-            <Col span={18} pull={6} style={{ textAlign: 'left' }} >
+            <Col span={18} pull={6} style={{ textAlign: 'left' }}>
               <Button type="primary" icon="plus" size='large'
                       style={{ marginRight: 15 }}
                       disabled={this.props.isUpdatingEmployees || !activeCity}
-                      onClick={() => this.handleActiveEmployee({ uid: 0 })} >新建工牌</Button >
+                      onClick={() => this.handleActiveEmployee({ uid: 0 })}>新建工牌</Button>
               <Upload
                 action={Constant.ApiDomain + 'biz/vip/ofo/badges/upload/employees/' + activeCity}
                 showUploadList={false}
                 onChange={(info) => this.props.dispatch({ type: 'badge/uploadEmployeeList', payload: { info } })}
-                disabled={this.props.isUploadingEmployeeList} >
+                disabled={this.props.isUploadingEmployeeList}>
                 <Button size='large' icon="upload" loading={this.props.isUploadingEmployeeList}
-                        disabled={this.props.isUpdatingEmployees || !activeCity} >
+                        disabled={this.props.isUpdatingEmployees || !activeCity}>
                   批量上传
-                </Button >
-              </Upload >
+                </Button>
+              </Upload>
 
-              <span style={{ display: this.state.isShowCheckBox ? 'inline-block' : 'none' }} >
-            <Divider type="vertical" />
+              <span style={{ display: this.state.isShowCheckBox ? 'inline-block' : 'none' }}>
+            <Divider type="vertical"/>
 
             <Popconfirm placement="bottom" title={'确定删除所选项目？'}
                         okText="确定"
@@ -213,36 +213,36 @@ class CardList extends PureComponent {
                           type: 'badge/batchDeleteEmployee',
                           payload: { employees: this.props.employees.filter(employee => (employee.isChecked)) },
                         })}
-                        cancelText="取消" >
+                        cancelText="取消">
               <Button icon="delete" size="large"
                       style={{ marginRight: 15 }}
-                      disabled={this.props.isUpdatingEmployees || !activeCity} >批量删除</Button >
-            </Popconfirm >
+                      disabled={this.props.isUpdatingEmployees || !activeCity}>批量删除</Button>
+            </Popconfirm>
             <Button type="danger" icon="credit-card" size="large"
                     onClick={() => this.showReviewModel()}
-                    disabled={this.props.isUpdatingEmployees || !activeCity} >提交审核</Button >
-          </span >
-            </Col >
-          </Row >
-        </Header >
+                    disabled={this.props.isUpdatingEmployees || !activeCity}>提交审核</Button>
+          </span>
+            </Col>
+          </Row>
+        </Header>
 
-        <div className={styles.cardList} >
+        <div className={styles.cardList}>
           <List
             rowKey="id"
             loading={isUpdatingEmployees}
             grid={{ gutter: 24, lg: 4, md: 3, sm: 2, xs: 1 }}
             dataSource={employees}
             renderItem={item => (
-              <List.Item key={item.uid} >
+              <List.Item key={item.uid}>
 
-                <Spin spinning={this.props.updatingEmployeeUids.includes(item.uid)} >
+                <Spin spinning={this.props.updatingEmployeeUids.includes(item.uid)}>
                   <Card
                     hoverable
                     className={styles.card}
                     cover={<img
                       onClick={() => item.badge !== undefined && window.open(item.badge)}
                       alt=""
-                      src={item.badge === undefined ? placeholder : `${item.badgeThumb}`} />}
+                      src={item.badge === undefined ? placeholder : `${item.badgeThumb}`}/>}
 
                     extra={this.state.isShowCheckBox ? <Checkbox
                       onChange={(e) => this.props.dispatch({ type: 'badge/toggleCheck', payload: { employee: item, checkbox: e.target } })}
@@ -253,11 +253,11 @@ class CardList extends PureComponent {
                       <Popconfirm placement="topLeft" title={'确定删除 ' + item.name + ' ?'}
                                   okText="确定"
                                   onConfirm={() => this.props.dispatch({ type: 'badge/deleteEmployee', payload: { employee: item } })}
-                                  cancelText="取消" >
-                        <Icon type="delete" />
-                      </Popconfirm >,
+                                  cancelText="取消">
+                        <Icon type="delete"/>
+                      </Popconfirm>,
 
-                      <Icon onClick={() => this.handleActiveEmployee(item)} type="edit" />,
+                      <Icon onClick={() => this.handleActiveEmployee(item)} type="edit"/>,
 
                       <Upload
                         showUploadList={false}
@@ -265,17 +265,17 @@ class CardList extends PureComponent {
                         onChange={(info) => this.props.dispatch({ type: 'badge/uploadEmployeeAvatar', payload: { employee: item, info: info } })}
                       >
 
-                        <Icon type="upload" />
-                      </Upload >]}
+                        <Icon type="upload"/>
+                      </Upload>]}
                   >
                     <Card.Meta
                       title={`${item.workId} / ${item.name}`}
                       description={`${item.englishName} / ${item.department}`}
                     />
-                  </Card >
-                </Spin >
+                  </Card>
+                </Spin>
 
-              </List.Item >
+              </List.Item>
             )}
           />
 
@@ -295,11 +295,11 @@ class CardList extends PureComponent {
                              onFieldsChange={(changedFields) => this.props.dispatch(
                                { type: 'badge/activeEmployeeFieldsChange', payload: { changedFields } })}
                              onSubmit={(event) => this.props.dispatch(
-                               { type: 'badge/updateEmployee', payload: { employee: this.props.activeEmployee } })} />
+                               { type: 'badge/updateEmployee', payload: { employee: this.props.activeEmployee } })}/>
 
-          </Modal >
-        </div >
-      </PageHeaderLayout >
+          </Modal>
+        </div>
+      </PageHeaderLayout>
     );
   }
 }

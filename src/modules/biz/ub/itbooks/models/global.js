@@ -10,7 +10,7 @@ export default {
   },
 
   effects: {
-    * fetchNotices(_, {call, put}) {
+    * fetchNotices(_, { call, put }) {
       yield put({
         type: 'changeNoticeLoading',
         payload: true,
@@ -25,7 +25,7 @@ export default {
         payload: data.length,
       });
     },
-    * clearNotices({payload}, {put, select}) {
+    * clearNotices({ payload }, { put, select }) {
       yield put({
         type: 'saveClearedNotices',
         payload,
@@ -39,26 +39,26 @@ export default {
   },
 
   reducers: {
-    changeLayoutCollapsed(state, {payload}) {
+    changeLayoutCollapsed(state, { payload }) {
       return {
         ...state,
         collapsed: payload,
       };
     },
-    saveNotices(state, {payload}) {
+    saveNotices(state, { payload }) {
       return {
         ...state,
         notices: payload,
         fetchingNotices: false,
       };
     },
-    saveClearedNotices(state, {payload}) {
+    saveClearedNotices(state, { payload }) {
       return {
         ...state,
         notices: state.notices.filter(item => item.type !== payload),
       };
     },
-    changeNoticeLoading(state, {payload}) {
+    changeNoticeLoading(state, { payload }) {
       return {
         ...state,
         fetchingNotices: payload,
@@ -68,12 +68,12 @@ export default {
 
   subscriptions: {
     // setup({history}) {
-      // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      // return history.listen(({pathname, search}) => {
-      //   if (typeof window.ga !== 'undefined') {
-      //     window.ga('send', 'pageview', pathname + search);
-      //   }
-      // });
+    // Subscribe history(url) change, trigger `load` action if pathname is `/`
+    // return history.listen(({pathname, search}) => {
+    //   if (typeof window.ga !== 'undefined') {
+    //     window.ga('send', 'pageview', pathname + search);
+    //   }
+    // });
     // },
   },
 };

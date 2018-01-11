@@ -5,9 +5,9 @@ import cover from '../assets/cover.gif';
 class HomePage extends Component {
   render() {
     return (
-      <div >
-        <img src={cover} alt="" />
-      </div >
+      <div>
+        <img src={cover} alt=""/>
+      </div>
     );
   }
 }

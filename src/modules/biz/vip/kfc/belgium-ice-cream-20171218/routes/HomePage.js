@@ -27,9 +27,9 @@ class Share extends Component {
     };
 
     return (
-      <div style={styles.content} >
-        <img style={styles.shareImage} src={share} alt="" />
-        <img src={h1} style={styles.h1} alt="" />
+      <div style={styles.content}>
+        <img style={styles.shareImage} src={share} alt=""/>
+        <img src={h1} style={styles.h1} alt=""/>
         <img src={button} style={styles.button} onClick={(e) => this.handleShare(e)}
              data-type="1"
              data-thumb={`${Constant.StaticDomain}uploaded/2017/11/23/9cad79a5376044741f86959a6598b172.png?x-oss-process=image/resize,limit_0,w_100`}
@@ -37,7 +37,7 @@ class Share extends Component {
              data-url="http://mp.weixin.qq.com/bizmall/cardshelf?t=cardticket/shelf_list&biz=MzIwMDAyMDI4MQ==&shelf_id=21"
              alt=""
         />
-      </div >
+      </div>
     );
   }
 

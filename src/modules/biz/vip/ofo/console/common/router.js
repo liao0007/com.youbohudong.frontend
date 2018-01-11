@@ -16,7 +16,7 @@ const dynamicWrapper = (app, models, component, parentPath) => {
       const p = component();
       return new Promise((resolve, reject) => {
         p.then((Comp) => {
-          resolve(props => <Comp {...props} routerData={getRouterData(app, parentPath)} />);
+          resolve(props => <Comp {...props} routerData={getRouterData(app, parentPath)}/>);
         }).catch(err => reject(err));
       });
     },

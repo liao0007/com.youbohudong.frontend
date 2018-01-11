@@ -1,18 +1,12 @@
-export const menuData = [
-  {
-    name: '工牌制作',
-    icon: 'book',
-    path: '/badge/card-list/main-land/010',
-  },
-];
-
 export const categoriesToMenuData = (categories) => {
   return categories.map(category => ({
     name: category.name,
+    key: category.key,
     path: category.key,
     children: category.subcategories.map(subcategory => (
       {
         name: subcategory.name,
+        key: subcategory.key,
         path: subcategory.key,
       }
     )),

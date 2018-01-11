@@ -22,13 +22,13 @@ export default ({ app, history, match }) => {
   });
 
   return (
-    <Router history={history} >
-      <Switch >
-        <Route exact path={`${match.path}`} render={(props) => <HomePage {...props} app={app} />} />
-        <Route exact path={`${match.path}/download`} render={(props) => <DownloadPage {...props} app={app} />} />
-        <Route exact path={`${match.path}/tasks`} render={(props) => <TaskListPage {...props} app={app} />} />
-        <Route exact path={`${match.path}/tasks/:key`} render={(props) => <TaskDetailPage {...props} app={app} />} />
-      </Switch >
-    </Router >
+    <Router history={history}>
+      <Switch>
+        <Route exact path={`${match.path}`} render={(props) => <HomePage {...props} app={app}/>}/>
+        <Route exact path={`${match.path}/download`} render={(props) => <DownloadPage {...props} app={app}/>}/>
+        <Route exact path={`${match.path}/tasks`} render={(props) => <TaskListPage {...props} app={app}/>}/>
+        <Route exact path={`${match.path}/tasks/:key`} render={(props) => <TaskDetailPage {...props} app={app}/>}/>
+      </Switch>
+    </Router>
   );
 };

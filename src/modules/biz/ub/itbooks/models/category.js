@@ -14,7 +14,6 @@ export default {
   subscriptions: {
     setup({ history, dispatch }) {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      console.log(history);
       return history.listen(({ pathname }) => {
         dispatch({ type: 'listCategory' });
       });

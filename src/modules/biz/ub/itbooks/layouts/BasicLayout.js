@@ -1,38 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Layout, Icon } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
-import { Route, Redirect, Switch } from 'dva/router';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import { enquireScreen } from 'enquire-js';
 import GlobalHeader from '../../../../../components/antd-pro/GlobalHeader';
 import GlobalFooter from '../../../../../components/antd-pro/GlobalFooter';
-import SiderMenu from '../../../../../components/antd-pro/SiderMenu';
-import NotFound from '../routes/Exception/404';
-import { getRoutes } from '../../../../../utils/utils';
+import SiderMenu from '../components/SiderMenu';
 import logo from '../assets/logo.svg';
 import { menuFormatter } from '../../../../../utils/menu';
 import { categoriesToMenuData } from '../common/menu';
-
-/**
- * 根据菜单取得重定向地址.
- */
-const redirectData = [];
-const getRedirect = (item) => {
-  if (item && item.children) {
-    if (item.children[0] && item.children[0].path) {
-      redirectData.push({
-        from: `/${item.path}`,
-        to: `/${item.children[0].path}`,
-      });
-      item.children.forEach((children) => {
-        getRedirect(children);
-      });
-    }
-  }
-};
 
 const { Content } = Layout;
 const query = {
@@ -62,22 +40,10 @@ enquireScreen((b) => {
 });
 
 class BasicLayout extends React.PureComponent {
-  static childContextTypes = {
-    location: PropTypes.object,
-    breadcrumbNameMap: PropTypes.object,
-  };
 
   state = {
     isMobile,
   };
-
-  getChildContext() {
-    const { location, routerData } = this.props;
-    return {
-      location,
-      breadcrumbNameMap: routerData,
-    };
-  }
 
   componentDidMount() {
     enquireScreen((b) => {
@@ -87,70 +53,41 @@ class BasicLayout extends React.PureComponent {
     });
   }
 
-  getPageTitle() {
-    const { routerData, location } = this.props;
-    const { pathname } = location;
-    let title = 'OFO小黄车';
-    if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - OFO小黄车`;
-    }
-    return title;
-  }
-
   render() {
-    const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location, dispatch,
-    } = this.props;
-
-    const formattedMenuData = menuFormatter(categoriesToMenuData(this.props.categories), match.path);
-    formattedMenuData.forEach(getRedirect);
-
+    const { currentUser, collapsed, location, dispatch, match, routeRootPath } = this.props;
+    const formattedMenuData = menuFormatter(categoriesToMenuData(this.props.categories), routeRootPath);
     const layout = (
-      <Layout >
+      <Layout>
         <SiderMenu
           collapsed={collapsed}
           location={location}
           dispatch={dispatch}
           isMobile={this.state.isMobile}
           menus={formattedMenuData}
+          match={match}
           logo={logo}
-          logoLink={'/biz/vip/ofo/console'}
-          title={'OFO小黄车'}
+          logoLink={'/biz/ub/itbooks'}
+          title={'ITBOOKS'}
         />
-        <Layout >
+
+        <Layout>
           <GlobalHeader
             currentUser={currentUser}
-            fetchingNotices={fetchingNotices}
-            notices={notices}
+            fetchingNotices={false}
+            notices={[]}
             collapsed={collapsed}
             dispatch={dispatch}
             isMobile={this.state.isMobile}
             logo={logo}
-            logoLink={'/biz/vip/ofo/console'}
+            logoLink={'/biz/ub/itbooks'}
           />
-          <Content style={{ margin: '24px 24px 0', height: '100%' }} >
-            <div style={{ minHeight: 'calc(100vh - 260px)' }} >
-              <Switch >
-                {
-                  redirectData.map(item =>
-                    <Redirect key={item.from} exact from={item.from}
-                              to={item.to} />,
-                  )
-                }
-                {
-                  getRoutes(match.path, routerData).map(item => (
-                    <Route
-                      key={item.key}
-                      path={item.path}
-                      component={item.component}
-                      exact={item.exact}
-                    />
-                  ))
-                }
-                <Redirect exact from="/" to="/dashboard/analysis" />
-                <Route render={NotFound} />
-              </Switch >
-            </div >
+
+          <Content style={{ margin: '24px 24px 0', height: '100%' }}>
+
+            <div style={{ minHeight: 'calc(100vh - 260px)' }}>
+              {this.props.children}
+            </div>
+
             <GlobalFooter
               links={[
                 {
@@ -167,22 +104,22 @@ class BasicLayout extends React.PureComponent {
                   blankTarget: true,
                 }]}
               copyright={
-                <div >
-                  Copyright <Icon type="copyright" /> 2017 蚂蚁金服体验技术部出品
-                </div >
+                <div>
+                  Copyright <Icon type="copyright"/> 2017 蚂蚁金服体验技术部出品
+                </div>
               }
             />
-          </Content >
-        </Layout >
-      </Layout >
+          </Content>
+        </Layout>
+      </Layout>
     );
 
     return (
-      <DocumentTitle title={this.getPageTitle()} >
-        <ContainerQuery query={query} >
-          {params => <div className={classNames(params)} >{layout}</div >}
-        </ContainerQuery >
-      </DocumentTitle >
+      <DocumentTitle title={this.props.title}>
+        <ContainerQuery query={query}>
+          {params => <div className={classNames(params)}>{layout}</div>}
+        </ContainerQuery>
+      </DocumentTitle>
     );
   }
 }
