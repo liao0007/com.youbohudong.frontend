@@ -4,14 +4,14 @@ import dynamic from 'dva/dynamic';
 
 export default ({ app, history, match }) => {
 
-  const KFCModule = dynamic({ app, component: () => import('./kfc/router'), });
-  const OFOModule = dynamic({ app, component: () => import('./ofo/router'), });
+  const VIPModule = dynamic({ app, component: () => import('./vip/router'), });
+  const UBModule = dynamic({ app, component: () => import('./ub/router'), });
 
   return (
     <Router history={history} >
       <Switch >
-        <Route path={`${match.path}/kfc`} render={(props) => <KFCModule {...props} app={app} />} />
-        <Route path={`${match.path}/ofo`} render={(props) => <OFOModule {...props} app={app} />} />
+        <Route path={`${match.path}/vip`} render={(props) => <VIPModule {...props} app={app} />} />
+        <Route path={`${match.path}/ub`} render={(props) => <UBModule {...props} app={app} />} />
       </Switch >
     </Router >
   );
