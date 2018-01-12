@@ -6,8 +6,6 @@ export default {
 
   state: {
     categories: [],
-    activeCategory: undefined,
-    activeSubcategory: undefined,
     isUpdating: false,
   },
 
@@ -21,10 +19,6 @@ export default {
   },
 
   effects: {
-    * changeCategory({ payload }, { call, put }) {
-      yield put({ type: 'onChangeCategory', payload: payload });
-    },
-
     * listCategory({ payload }, { call, put }) {
       yield put({ type: 'onListCategory' });
       const response = yield call(listCategory);
@@ -33,14 +27,6 @@ export default {
   },
 
   reducers: {
-    changeCategory(state, action) {
-      return {
-        ...state,
-        activeCategory: action.payload.category,
-        activeSubcategory: action.payload.subcategory,
-      };
-    },
-
     onListCategory(state, action) {
       switch (action.status) {
         case Constant.ActionStatus.Success:

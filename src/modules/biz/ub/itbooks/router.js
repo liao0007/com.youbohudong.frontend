@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch } from 'dva/router';
+import { Route, Router, Switch } from 'dva/router';
 import { Spin } from 'antd';
 import dynamic from 'dva/dynamic';
 import onError from './error';
@@ -26,7 +26,12 @@ function RouterConfig({ history, app, match }) {
   return (
     <Router history={history}>
       <Switch>
-        <Route path={`${match.path}/:activeCategory/:activeSubcategory`} render={props => <CardListPage {...props} routeRootPath={match.path + "/"}/>}/>
+        <Route path={`${match.path}/search/:keywords`} render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
+        <Route path={`${match.path}/:activeCategory/:activeSubcategory`}
+               render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
+        <Route path={`${match.path}/:activeCategory`} render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
+        <Route path={`${match.path}`} render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
+
         <Route render={NotFound}/>
       </Switch>
     </Router>

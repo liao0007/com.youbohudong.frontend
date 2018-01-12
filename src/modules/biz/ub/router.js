@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, Switch } from 'dva/router';
+import { Route, Router, Switch } from 'dva/router';
 import dynamic from 'dva/dynamic';
 
 export default ({ app, history, match }) => {

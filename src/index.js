@@ -14,8 +14,8 @@ history.listen((location) => {
 });
 
 // 1. Initialize
-// const app = dva({ history });
-const app = dva();
+const app = dva({ history });
+// const app = dva();
 
 // 2. Plugins
 // app.use({});

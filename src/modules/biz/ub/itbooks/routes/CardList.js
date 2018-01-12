@@ -1,90 +1,124 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Button, Icon, List, Spin, Popconfirm, Upload, Checkbox, Input, Row, Col, Divider, Layout, Modal, Form } from 'antd';
-
-import PageHeaderLayout from '../layouts/PageHeaderLayout';
+import { Button, Col, Icon, List, Row } from 'antd';
 
 import styles from './CardList.less';
-import placeholder from './assets/placeholder.png';
-import template from './assets/template.xlsx';
-import { Constant } from '../../../../../constant';
 import BasicLayout from '../layouts/BasicLayout';
+import Ellipsis from 'ant-design-pro/lib/Ellipsis';
+import striptags from 'striptags';
+import Drawer from 'rc-drawer-menu';
+import DescriptionList from '../../../../../components/antd-pro/DescriptionList';
 
-const { Search } = Input;
-const { Content, Sider, Header } = Layout;
-const FormItem = Form.Item;
+const { Description } = DescriptionList;
 
 class CardList extends PureComponent {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      showLoadingMore: false,
+      activeBook: undefined,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      ...this.state,
+      showLoadingMore: nextProps.books.pagination ? nextProps.books.pagination.pager.page < nextProps.books.pagination.totalPages : false,
+    });
+  }
+
   componentDidMount() {
-    // this.props.dispatch({ type: 'badge/changeRegion', payload: { region: this.props.match.params.activeRegion }, });
-    // this.props.dispatch({ type: 'badge/changeCity', payload: { city: this.props.match.params.activeCity }, });
+    const { activeCategory, activeSubcategory, keywords } = this.props.match.params;
+    this.props.dispatch({ type: 'book/listBook', payload: { activeCategory, activeSubcategory, keywords, page: 1 } });
   }
 
   render() {
     const { books, isUpdating } = this.props;
-    const { activeCategory, activeSubcategory } = this.props;
+    const { activeCategory, activeSubcategory, keywords } = this.props.match.params;
 
-    const content = (
-      <div className={styles.pageHeaderContent}>
-        <p>
-          段落示意：蚂蚁金服务设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，
-          提供跨越设计与开发的体验解决方案。
-        </p>
-        <div className={styles.contentLink}>
-          <a onClick={() => {
-            window.location.href = template;
-          }}>
-            <img alt=""
-                 src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg"/> 下载批量上传模版
-          </a>
-        </div>
+    const loadMore = this.state.showLoadingMore ? (
+      <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>
+        {!isUpdating &&
+        <Button onClick={() => this.props.dispatch(
+          {
+            type: 'book/concatBook',
+            payload: { activeCategory, activeSubcategory, keywords, page: this.props.books.pagination.pager.page + 1 },
+          })}>加载更多</Button>}
       </div>
-    );
-
-    const extraContent = (
-      <div className={styles.extraImg}>
-        <img alt=""
-             src="https://gw.alipayobjects.com/zos/rmsportal/RzwpdLnhmvDJToTdfDPe.png"/>
-      </div>
-    );
+    ) : null;
 
     return (
-      <BasicLayout {...this.props} title={"BOOKS"}>
-        <PageHeaderLayout
-          title="工牌制作"
-          content={content}
-          extraContent={extraContent}
+      <BasicLayout {...this.props} title={'IT BOOKS'}>
+
+        <Drawer
+          level={null}
+          iconChild={false}
+          open={this.state.activeBook !== undefined}
+          // width="100vw"
+          placement="right"
         >
+          {this.state.activeBook ? (
+            <Row className={styles.drawerDetail} gutter={24} style={{ margin: '16px 0', color: '#ffffff' }}>
+              <Col span={16}>
+                <h1>{this.state.activeBook.title}</h1>
+                <h2>{this.state.activeBook.subtitle}</h2>
+                <DescriptionList
+                  style={{ marginBottom: 24 }}
+                  col={1}
+                >
+                  <Description term='Author'>{this.state.activeBook.author}</Description>
+                  <Description term="ISBN-10">{this.state.activeBook.isbn}</Description>
+                  <Description term='Year'>{this.state.activeBook.year}</Description>
+                  <Description term="Pages">{this.state.activeBook.pages}</Description>
+                  <Description term='Language'>{this.state.activeBook.language}</Description>
+                  <Description term='File size'>{this.state.activeBook.fileSize}</Description>
+                  <Description term='File format'>{this.state.activeBook.fileFormat}</Description>
+                  <Description term='Category'>{this.state.activeBook.category}</Description>
+                </DescriptionList>
+                <div dangerouslySetInnerHTML={{ __html: this.state.activeBook.description }}/>
+                <Button ghost size={'large'} onClick={() => this.setState({ ...this.state, activeBook: undefined })}
+                        icon={'close'}>关闭</Button>
+              </Col>
+              <Col span={8} style={{ textAlign: 'right' }}>
+                <img style={{width:"100%"}} alt="cover" src={`http://static.itbooks.youbohudong.com/${this.state.activeBook.cover}`}/>
+              </Col>
+            </Row>
+          ) : null}
+        </Drawer>
 
-          <div className={styles.cardList}>
-            <List
-              rowKey="id"
-              loading={isUpdating}
-              grid={{ gutter: 24, lg: 4, md: 3, sm: 2, xs: 1 }}
-              dataSource={books}
-              renderItem={item => (
-                <List.Item key={item.uid}>
+        {this.props.match.params.keywords ? (<h1><Icon type="search"/> Search Result for Keywords: "{this.props.match.params.keywords}"</h1>) : null}
 
-                  <Card
-                    hoverable
-                    className={styles.card}
-                    cover={<img
-                      alt=""
-                      src={item.cover === undefined ? placeholder : `${item.cover}`}/>}
-                  >
-                    <Card.Meta
-                      title={`${item.title} / ${item.subtitle}`}
-                      description={`${item.description}`}
-                    />
-                  </Card>
+        <div className={styles.cardList}>
+          <List
+            rowKey="id"
+            itemLayout="vertical"
+            size="large"
+            loadMore={loadMore}
+            loading={isUpdating}
+            dataSource={books.records}
+            renderItem={item => (
+              <List.Item
+                key={item.uid}
+                actions={[
+                  <a onClick={() => window.open(`http://static.itbooks.youbohudong.com/${item.url}`)}><Icon type="download"
+                                                                                                            style={{ marginRight: 8 }}/>下载PDF</a>,
+                  <a onClick={() => this.setState({ ...this.state, activeBook: item })}><Icon type="info-circle-o"
+                                                                                              style={{ marginRight: 8 }}/>详情</a>,
+                ]}
+                extra={<img width={200} alt="cover" src={`http://static.itbooks.youbohudong.com/${item.cover}`}/>}
+              >
 
-                </List.Item>
-              )}
-            />
+                <List.Item.Meta
+                  title={item.title}
+                  description={item.subtitle}
+                />
 
-          </div>
-        </PageHeaderLayout>
+                <Ellipsis length={500}>{striptags(item.description).replace('Book Description:', '').trim()}</Ellipsis>
+              </List.Item>
+            )}
+          />
+        </div>
       </BasicLayout>
     );
   }

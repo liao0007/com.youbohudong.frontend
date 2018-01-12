@@ -1,11 +1,11 @@
 import React from 'react';
-import { Layout, Icon } from 'antd';
+import { Layout } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import { enquireScreen } from 'enquire-js';
-import GlobalHeader from '../../../../../components/antd-pro/GlobalHeader';
+import GlobalHeader from '../components/GlobalHeader';
 import GlobalFooter from '../../../../../components/antd-pro/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
 import logo from '../assets/logo.svg';
@@ -54,8 +54,8 @@ class BasicLayout extends React.PureComponent {
   }
 
   render() {
-    const { currentUser, collapsed, location, dispatch, match, routeRootPath } = this.props;
-    const formattedMenuData = menuFormatter(categoriesToMenuData(this.props.categories), routeRootPath);
+    const { currentUser, collapsed, location, dispatch, match, moduleRootPath } = this.props;
+    const formattedMenuData = menuFormatter(categoriesToMenuData(this.props.categories), moduleRootPath);
     const layout = (
       <Layout>
         <SiderMenu
@@ -71,15 +71,15 @@ class BasicLayout extends React.PureComponent {
         />
 
         <Layout>
-          <GlobalHeader
-            currentUser={currentUser}
-            fetchingNotices={false}
-            notices={[]}
-            collapsed={collapsed}
-            dispatch={dispatch}
-            isMobile={this.state.isMobile}
-            logo={logo}
-            logoLink={'/biz/ub/itbooks'}
+          <GlobalHeader {...this.props}
+                        currentUser={currentUser}
+                        fetchingNotices={false}
+                        notices={[]}
+                        collapsed={collapsed}
+                        dispatch={dispatch}
+                        isMobile={this.state.isMobile}
+                        logo={logo}
+                        logoLink={'/biz/ub/itbooks'}
           />
 
           <Content style={{ margin: '24px 24px 0', height: '100%' }}>
@@ -91,22 +91,15 @@ class BasicLayout extends React.PureComponent {
             <GlobalFooter
               links={[
                 {
-                  title: 'Pro 首页',
-                  href: 'http://pro.ant.design',
-                  blankTarget: true,
-                }, {
-                  title: 'GitHub',
-                  href: 'https://github.com/ant-design/ant-design-pro',
-                  blankTarget: true,
-                }, {
-                  title: 'Ant Design',
-                  href: 'http://ant.design',
+                  title: '优播互动 · UB INTERACTIVE',
+                  href: 'http://www.youbohudong.com',
                   blankTarget: true,
                 }]}
               copyright={
-                <div>
-                  Copyright <Icon type="copyright"/> 2017 蚂蚁金服体验技术部出品
-                </div>
+                <p style={{ fontSize: 12 }}>
+                  本站书籍仅供交流学习，下载24小时内请自行删除<br/>
+                  优播互动不承担由任何不当使用本网站资源产生的法律责任
+                </p>
               }
             />
           </Content>

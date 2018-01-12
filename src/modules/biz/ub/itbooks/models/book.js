@@ -5,28 +5,23 @@ export default {
   namespace: 'book',
 
   state: {
-    books: [],
+    books: { records: [] },
     isUpdating: false,
   },
 
-  subscriptions: {
-    setup({ history, dispatch }) {
-      // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      return history.listen(({ pathname }) => {
-        dispatch({ type: 'listBook' });
-      });
-    },
-  },
+  subscriptions: {},
 
   effects: {
-    * changeBook({ payload }, { call, put }) {
-      yield put({ type: 'onChangeBook', payload: payload });
-    },
-
     * listBook({ payload }, { call, put }) {
       yield put({ type: 'onListBook' });
-      const response = yield call(listBook);
+      const response = yield call(listBook, payload);
       yield put({ type: 'onListBook', status: Constant.ActionStatus.Success, payload: { books: response } });
+    },
+
+    * concatBook({ payload }, { call, put }) {
+      yield put({ type: 'onConcatBook' });
+      const response = yield call(listBook, payload);
+      yield put({ type: 'onConcatBook', status: Constant.ActionStatus.Success, payload: { books: response } });
     },
   },
 
@@ -37,6 +32,23 @@ export default {
           return {
             ...state,
             books: action.payload.books,
+            isUpdating: false,
+          };
+
+        default:
+          return {
+            ...state,
+            isUpdating: true,
+          };
+      }
+    },
+    onConcatBook(state, action) {
+      switch (action.status) {
+        case Constant.ActionStatus.Success:
+          let newRecords = action.payload.books.records;
+          return {
+            ...state,
+            books: { ...action.payload.books, records: [...state.books.records, ...newRecords] },
             isUpdating: false,
           };
 
