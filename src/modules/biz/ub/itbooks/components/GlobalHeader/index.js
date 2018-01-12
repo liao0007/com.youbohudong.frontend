@@ -63,7 +63,7 @@ export default class GlobalHeader extends PureComponent {
           <HeaderSearch
             className={`${styles.action} ${styles.search}`}
             placeholder="搜索"
-            dataSource={['Scala for Java Developers', 'PHP']}
+            // dataSource={['Scala for Java Developers', 'PHP']}
             onPressEnter={(value) => this.handleSearch(value)}
           />
         </div>
