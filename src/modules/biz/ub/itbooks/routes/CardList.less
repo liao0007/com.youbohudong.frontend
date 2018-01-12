@@ -1,18 +1,21 @@
 @import "~antd/lib/style/themes/default.less";
 @import "../../../../../utils/utils.less";
 
+@heading-color: #ffffff;
+
 .pageHeaderContent {
   position: relative;
 }
 
 .drawerDetail {
-  color: #ffffff !important;
+  color: #ffffff;
   h1, h2, h3 {
-    color: #ffffff !important;
+    color: #ffffff;
   }
-  DescriptionList {
-    color: #ffffff !important;
-  }
+}
+
+.descriptionList div {
+  color: #ffffff !important;
 }
 
 @media screen and (max-width: @screen-lg) {
@@ -34,16 +37,8 @@
     padding-bottom: 30px;
   }
 
-  .contentLink {
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 1000px;
-    a {
-      margin-right: 16px;
-    }
-    img {
-      margin-right: 4px;
-    }
+  .drawer {
+    width: 100vw;
   }
+
 }
