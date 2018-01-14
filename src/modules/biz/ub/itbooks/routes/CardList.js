@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Col, Icon, List, Row } from 'antd';
+import { Button, Col, Icon, List, Row, Spin } from 'antd';
 
 import styles from './CardList.less';
 import BasicLayout from '../layouts/BasicLayout';
@@ -9,6 +9,7 @@ import striptags from 'striptags';
 import Drawer from 'rc-drawer-menu';
 import DescriptionList from '../../../../../components/antd-pro/DescriptionList';
 import { enquireScreen } from 'enquire-js';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const { Description } = DescriptionList;
 
@@ -18,14 +19,14 @@ class CardList extends PureComponent {
     super(props);
     this.state = {
       isMobile: false,
-      showLoadingMore: false,
+      hasMore: false,
       activeBook: undefined,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      showLoadingMore: nextProps.books.pagination ? nextProps.books.pagination.pager.page < nextProps.books.pagination.totalPages : false,
+      hasMore: nextProps.books.pagination ? nextProps.books.pagination.pager.page < nextProps.books.pagination.totalPages : false,
     });
   }
 
@@ -47,17 +48,6 @@ class CardList extends PureComponent {
   render() {
     const { books, isUpdating } = this.props;
     const { activeCategory, activeSubcategory, keywords } = this.props.match.params;
-
-    const loadMore = this.state.showLoadingMore ? (
-      <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>
-        {!isUpdating &&
-        <Button onClick={() => this.props.dispatch(
-          {
-            type: 'book/concatBook',
-            payload: { activeCategory, activeSubcategory, keywords, page: this.props.books.pagination.pager.page + 1 },
-          })}>加载更多</Button>}
-      </div>
-    ) : null;
 
     return (
       <BasicLayout {...this.props} title={'IT BOOKS'}>
@@ -110,37 +100,48 @@ class CardList extends PureComponent {
 
         {this.props.match.params.keywords ? (<h1><Icon type="search"/> Search Result for Keywords: "{this.props.match.params.keywords}"</h1>) : null}
 
-        <div className={styles.cardList}>
-          <List
-            rowKey="id"
-            itemLayout="vertical"
-            size="large"
-            loadMore={loadMore}
-            loading={isUpdating}
-            dataSource={books.records}
-            renderItem={item => (
-              <List.Item
-                key={item.uid}
-                actions={[
-                  <a onClick={() => this.handleDownload(item)}><Icon type="download"
-                                                                     style={{ marginRight: 8 }}/>下载PDF</a>,
-                  <a onClick={() => this.setState({ activeBook: item })}><Icon type="info-circle-o"
-                                                                               style={{ marginRight: 8 }}/>详情</a>,
-                ]}
-                extra={<img style={{ marginBottom: this.state.isMobile ? 16 : 0 }} width={this.state.isMobile ? window.innerWidth - 48 : 200}
-                            alt="cover"
-                            src={`http://static.itbooks.youbohudong.com/${item.cover}`}/>}
-              >
+        <div>
+          <InfiniteScroll
+            initialLoad={false}
+            pageStart={0}
+            loadMore={() => this.props.dispatch(
+              {
+                type: 'book/concatBook',
+                payload: { activeCategory, activeSubcategory, keywords, page: this.props.books.pagination.pager.page + 1 },
+              })}
+            hasMore={!isUpdating && this.state.hasMore}
+            useWindow={true}
+          >
+            <List
+              rowKey="id"
+              itemLayout="vertical"
+              size="large"
+              // loading={isUpdating}
+              dataSource={books.records}
+              renderItem={item => (
+                <List.Item
+                  key={item.uid}
+                  actions={[
+                    <a onClick={() => this.handleDownload(item)}><Icon type="download"
+                                                                       style={{ marginRight: 8 }}/>下载PDF</a>,
+                    <a onClick={() => this.setState({ activeBook: item })}><Icon type="info-circle-o"
+                                                                                 style={{ marginRight: 8 }}/>详情</a>,
+                  ]}
+                  extra={<img style={{ marginBottom: this.state.isMobile ? 16 : 0 }} width={this.state.isMobile ? window.innerWidth - 48 : 200}
+                              alt="cover"
+                              src={`http://static.itbooks.youbohudong.com/${item.cover}`}/>}
+                >
 
-                <List.Item.Meta
-                  title={item.title}
-                  description={item.subtitle}
-                />
+                  <List.Item.Meta
+                    title={item.title}
+                    description={item.subtitle}
+                  />
 
-                <Ellipsis length={500}>{striptags(item.description).replace('Book Description:', '').trim()}</Ellipsis>
-              </List.Item>
-            )}
-          />
+                  <Ellipsis length={500}>{striptags(item.description).replace('Book Description:', '').trim()}</Ellipsis>
+                </List.Item>
+              )}
+            />
+          </InfiniteScroll>
         </div>
       </BasicLayout>
     );
