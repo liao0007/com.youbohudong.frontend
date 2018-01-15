@@ -11,6 +11,7 @@ import DescriptionList from '../../../../../components/antd-pro/DescriptionList'
 import { enquireScreen } from 'enquire-js';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Link } from 'react-router-dom';
+import StepForm from '../components/StepForm';
 
 const { Description } = DescriptionList;
 
@@ -77,6 +78,8 @@ class CardList extends PureComponent {
 
         <Spin indicator={<Icon type="loading" style={{ fontSize: 28 }} spin/>} spinning={isUpdating}
               style={{ position: 'fixed', top: 20, right: 20, zIndex: 100 }}/>
+
+        <StepForm {...this.props} isMobile={this.state.isMobile} />
 
         <Drawer
           level={null}
@@ -166,7 +169,9 @@ class CardList extends PureComponent {
                 >
 
                   <List.Item.Meta
-                    title={(<h4>{item.title}<br/><small>By {item.author}, {item.year}</small></h4>)}
+                    title={(<h4>{item.title}<br/>
+                      <small>By {item.author}, {item.year}</small>
+                    </h4>)}
                     description={item.subtitle ? item.subtitle : ''}
                   />
 

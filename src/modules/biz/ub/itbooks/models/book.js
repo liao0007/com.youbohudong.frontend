@@ -7,6 +7,7 @@ export default {
   state: {
     books: { records: [] },
     isUpdating: false,
+    order: {},
   },
 
   subscriptions: {},
