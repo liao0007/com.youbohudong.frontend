@@ -15,6 +15,7 @@ export default class SiderMenu extends PureComponent {
         <SubMenu
           title={item.icon ? <span>{icon}<span>{item.name}</span></span> : item.name}
           key={item.key || item.path}
+          onTitleClick={this.handleOpenChange}
         >
           {this.getNavMenuItems(item.children)}
         </SubMenu>
@@ -34,9 +35,8 @@ export default class SiderMenu extends PureComponent {
     });
   }
 
-  handleOpenChange = (openKeys) => {
-    const path = openKeys.length > 0 ? `${this.props.moduleRootPath}${openKeys[openKeys.length - 1]}` : `${this.props.moduleRootPath}`;
-    this.props.dispatch(routerRedux.push(path));
+  handleOpenChange = ({ key, domEvent }) => {
+    this.props.dispatch(routerRedux.push(`${this.props.moduleRootPath}${key}`));
   };
 
   render() {
@@ -68,7 +68,6 @@ export default class SiderMenu extends PureComponent {
           {...menuProps}
           defaultSelectedKeys={[this.props.match.params.activeSubcategory]}
           style={{ padding: '16px 0', width: '100%' }}
-          onOpenChange={this.handleOpenChange}
         >
           {this.getNavMenuItems(this.props.menus)}
         </Menu>

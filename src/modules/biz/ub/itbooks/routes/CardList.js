@@ -166,7 +166,7 @@ class CardList extends PureComponent {
                 >
 
                   <List.Item.Meta
-                    title={(<h4>{item.title}<br/><small>By {item.author} {item.year}</small></h4>)}
+                    title={(<h4>{item.title}<br/><small>By {item.author}, {item.year}</small></h4>)}
                     description={item.subtitle ? item.subtitle : ''}
                   />
 
