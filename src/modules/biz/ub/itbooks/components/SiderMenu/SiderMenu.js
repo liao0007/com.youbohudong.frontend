@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Icon, Layout, Menu } from 'antd';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import styles from './index.less';
 
 const { Sider } = Layout;
@@ -34,6 +34,11 @@ export default class SiderMenu extends PureComponent {
     });
   }
 
+  handleOpenChange = (openKeys) => {
+    const path = openKeys.length > 0 ? `${this.props.moduleRootPath}${openKeys[openKeys.length - 1]}` : `${this.props.moduleRootPath}`;
+    this.props.dispatch(routerRedux.push(path));
+  };
+
   render() {
     const { collapsed, onCollapse } = this.props;
     // Don't show popup menu when it is been collapsed
@@ -63,6 +68,7 @@ export default class SiderMenu extends PureComponent {
           {...menuProps}
           defaultSelectedKeys={[this.props.match.params.activeSubcategory]}
           style={{ padding: '16px 0', width: '100%' }}
+          onOpenChange={this.handleOpenChange}
         >
           {this.getNavMenuItems(this.props.menus)}
         </Menu>

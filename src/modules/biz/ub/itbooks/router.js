@@ -7,7 +7,7 @@ import styles from './index.less';
 import NotFound from './routes/Exception/404';
 
 dynamic.setDefaultLoadingComponent(() => {
-  return <Spin size="large" className={styles.globalSpin}/>;
+  return <Spin size="large" className={styles.globalSpin} style={{ marginTop: Math.floor(window.innerHeight / 2) - 10 }}/>;
 });
 
 function RouterConfig({ history, app, match }) {

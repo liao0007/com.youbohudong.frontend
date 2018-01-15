@@ -10,6 +10,7 @@ import Drawer from 'rc-drawer-menu';
 import DescriptionList from '../../../../../components/antd-pro/DescriptionList';
 import { enquireScreen } from 'enquire-js';
 import InfiniteScroll from 'react-infinite-scroller';
+import { Link } from 'react-router-dom';
 
 const { Description } = DescriptionList;
 
@@ -45,12 +46,37 @@ class CardList extends PureComponent {
     window.open(`http://static.itbooks.youbohudong.com/${item.url}`);
   }
 
+  renderCategory(categoryKeys, subcategoryKeys) {
+    const categories = this.props.categories;
+
+    const categoryKeyArr = categoryKeys.split(',');
+    const subcategoryKeyArr = subcategoryKeys.split(',');
+
+    const validSubcategories = categories.map(category =>
+      category.subcategories.filter(subcategory => subcategoryKeyArr.includes(subcategory.key)).
+        map(subcategory => ({ category: { key: category.key, name: category.name }, subcategory: { key: subcategory.key, name: subcategory.name } })),
+    ).reduce((conc, category) => [...conc, ...category], []);
+
+    const validCategory = categories.filter(
+      category => categoryKeyArr.includes(category.key)).map(category => ({ key: category.key, name: category.name }));
+    console.log(validCategory);
+
+    const categoryRender = validCategory.map(category => <Link style={{ marginRight: 10 }}
+                                                               to={`${this.props.moduleRootPath}${category.key}`}>{category.name}</Link>);
+    const subcategoryRender = validSubcategories.map(({ category, subcategory }) => <Link style={{ marginRight: 10 }}
+                                                                                          to={`${this.props.moduleRootPath}${category.key}/${subcategory.key}`}>{category.name}/{subcategory.name}</Link>);
+    return [...categoryRender, subcategoryRender];
+  }
+
   render() {
     const { books, isUpdating } = this.props;
     const { activeCategory, activeSubcategory, keywords } = this.props.match.params;
 
     return (
       <BasicLayout {...this.props} title={'IT BOOKS'}>
+
+        <Spin indicator={<Icon type="loading" style={{ fontSize: 28 }} spin/>} spinning={isUpdating}
+              style={{ position: 'fixed', top: 20, right: 20, zIndex: 100 }}/>
 
         <Drawer
           level={null}
@@ -62,14 +88,13 @@ class CardList extends PureComponent {
         >
           {this.state.activeBook ? (
             <div className={styles.drawerDetail} style={{ margin: 24 }}>
-              <Row>
+              <Row gutter={8}>
                 <Col span={16}>
                   <h2>{this.state.activeBook.title}</h2>
                   <h3>{this.state.activeBook.subtitle}&nbsp;</h3>
                   <DescriptionList
                     className={styles.descriptionList}
-                    style={{ marginBottom: 24 }}
-                    col={2}
+                    col={1}
                     size={'small'}
                   >
                     <Description term='Author'>{this.state.activeBook.author}</Description>
@@ -79,18 +104,27 @@ class CardList extends PureComponent {
                     <Description term='Language'>{this.state.activeBook.language}</Description>
                     <Description term='File size'>{this.state.activeBook.fileSize} MB</Description>
                     <Description term='File format'>{this.state.activeBook.fileFormat}</Description>
+                    <Description term='Category'>{this.renderCategory(this.state.activeBook.categoryKey,
+                      this.state.activeBook.subcategoryKey)}</Description>
                   </DescriptionList>
+
                 </Col>
                 <Col span={8}>
                   <img style={{ width: '100%' }} alt="cover" src={`http://static.itbooks.youbohudong.com/${this.state.activeBook.cover}`}/>
                 </Col>
               </Row>
+
               <Row style={{ marginTop: 24 }}>
                 <Col span={24}>
-                  <div dangerouslySetInnerHTML={{ __html: this.state.activeBook.description }}/>
                   <Button ghost style={{ marginRight: 16 }} type={'primary'} size={'large'} onClick={() => this.handleDownload(this.state.activeBook)}
                           icon={'download'}>下载PDF</Button>
                   <Button ghost size={'large'} onClick={() => this.setState({ activeBook: undefined })} icon={'close'}>关闭</Button>
+                </Col>
+              </Row>
+
+              <Row style={{ marginTop: 24 }}>
+                <Col span={24}>
+                  <div dangerouslySetInnerHTML={{ __html: this.state.activeBook.description }}/>
                 </Col>
               </Row>
             </div>
@@ -115,8 +149,7 @@ class CardList extends PureComponent {
             <List
               rowKey="id"
               itemLayout="vertical"
-              size="large"
-              // loading={isUpdating}
+
               dataSource={books.records}
               renderItem={item => (
                 <List.Item
@@ -133,8 +166,8 @@ class CardList extends PureComponent {
                 >
 
                   <List.Item.Meta
-                    title={item.title}
-                    description={item.subtitle}
+                    title={(<h4>{item.title}<br/><small>By {item.author} {item.year}</small></h4>)}
+                    description={item.subtitle ? item.subtitle : ''}
                   />
 
                   <Ellipsis length={500}>{striptags(item.description).replace('Book Description:', '').trim()}</Ellipsis>
@@ -152,6 +185,7 @@ export default connect(state => ({
   books: state.book.books,
   isUpdating: state.book.isUpdating,
 
+  categories: state.category.categories,
   activeCategory: state.category.activeCategory,
   activeSubcategory: state.category.activeSubcategory,
 }))(CardList);

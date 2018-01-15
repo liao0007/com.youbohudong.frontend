@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { BackTop, Layout } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
@@ -59,6 +59,7 @@ class BasicLayout extends React.PureComponent {
     const layout = (
       <Layout>
         <SiderMenu
+          {...this.props}
           collapsed={collapsed}
           location={location}
           dispatch={dispatch}
@@ -87,6 +88,8 @@ class BasicLayout extends React.PureComponent {
             <div style={{ minHeight: 'calc(100vh - 260px)' }}>
               {this.props.children}
             </div>
+
+            <BackTop style={{right:20, bottom:20, backgroundColor:"ffffff"}} />
 
             <GlobalFooter
               links={[
