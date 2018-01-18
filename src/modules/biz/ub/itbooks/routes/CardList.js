@@ -60,7 +60,6 @@ class CardList extends PureComponent {
 
     const validCategory = categories.filter(
       category => categoryKeyArr.includes(category.key)).map(category => ({ key: category.key, name: category.name }));
-    console.log(validCategory);
 
     const categoryRender = validCategory.map(category => <Link style={{ marginRight: 10 }}
                                                                to={`${this.props.moduleRootPath}${category.key}`}>{category.name}</Link>);
@@ -70,7 +69,7 @@ class CardList extends PureComponent {
   }
 
   render() {
-    const { books, isUpdating } = this.props;
+    const { books, isUpdating, order } = this.props;
     const { activeCategory, activeSubcategory, keywords } = this.props.match.params;
 
     return (
@@ -79,7 +78,7 @@ class CardList extends PureComponent {
         <Spin indicator={<Icon type="loading" style={{ fontSize: 28 }} spin/>} spinning={isUpdating}
               style={{ position: 'fixed', top: 20, right: 20, zIndex: 100 }}/>
 
-        <StepForm {...this.props} isMobile={this.state.isMobile} />
+        <StepForm {...this.props} isMobile={this.state.isMobile}/>
 
         <Drawer
           level={null}
@@ -121,6 +120,12 @@ class CardList extends PureComponent {
                 <Col span={24}>
                   <Button ghost style={{ marginRight: 16 }} type={'primary'} size={'large'} onClick={() => this.handleDownload(this.state.activeBook)}
                           icon={'download'}>下载PDF</Button>
+                  <Button ghost style={{ marginRight: 16 }} size={'large'}
+                          onClick={() => {
+                            const book = this.state.activeBook;
+                            this.setState({ activeBook: undefined });
+                            this.props.dispatch({ type: 'book/onOrderBook', payload: { book: book } });
+                          }} icon={'shop'}>购买打印本</Button>
                   <Button ghost size={'large'} onClick={() => this.setState({ activeBook: undefined })} icon={'close'}>关闭</Button>
                 </Col>
               </Row>
@@ -189,6 +194,7 @@ class CardList extends PureComponent {
 export default connect(state => ({
   books: state.book.books,
   isUpdating: state.book.isUpdating,
+  order: state.book.order,
 
   categories: state.category.categories,
   activeCategory: state.category.activeCategory,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Row, Col } from 'antd';
+import { Button, Col, Row } from 'antd';
 import { routerRedux } from 'dva/router';
 import Result from '../../../../../../components/antd-pro/Result';
 import styles from './style.less';

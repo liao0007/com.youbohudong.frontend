@@ -18,7 +18,15 @@
     "development": {
       "extraBabelPlugins": [
         "dva-hmr"
-      ]
+      ],
+      "proxy": {
+         "/api": {
+           "target": "http://localhost:9000/",
+           "changeOrigin": true,
+           "pathRewrite": { "^/api" : "/api" },
+           "secure": false
+         }
+       }
     },
     "production": {
       "extraBabelPlugins": [
