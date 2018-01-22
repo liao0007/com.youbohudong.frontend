@@ -17,11 +17,11 @@ class StepForm extends PureComponent {
       1: Step2,
       2: Step3,
     };
-    return componentMap[this.props.step];
+    return componentMap[this.props.order.step];
   }
 
   render() {
-    const { form, stepFormData, isUpdating, dispatch, step, book } = this.props;
+    const { form, dispatch, order } = this.props;
     const formItemLayout = {
       labelCol: {
         span: 5,
@@ -33,13 +33,13 @@ class StepForm extends PureComponent {
     const CurrentComponent = this.getCurrentComponent();
     return (
       <Modal
-        visible={book !== undefined}
+        visible={order.book !== undefined}
         style={{ top: this.props.isMobile ? 0 : 24 }}
         width={this.props.isMobile ? window.innerWidth - 48 : '60vw'}
         closable={false}
         footer={null}
       >
-        <Steps current={step} className={styles.steps}>
+        <Steps current={order.step} className={styles.steps}>
           <Step title="填写快递信息"/>
           <Step title="确认付款信息"/>
           <Step title="完成"/>
@@ -48,9 +48,7 @@ class StepForm extends PureComponent {
           formItemLayout={formItemLayout}
           form={form}
           dispatch={dispatch}
-          data={stepFormData}
-          book={book}
-          isUpdating={isUpdating}
+          order={order}
         />
       </Modal>
     );
@@ -58,8 +56,5 @@ class StepForm extends PureComponent {
 }
 
 export default connect(state => ({
-  step: state.book.order.step,
-  book: state.book.order.book,
-  stepFormData: state.book.order.order,
-  isUpdating: state.book.order.isUpdating,
+  order: state.book.order
 }))(StepForm);

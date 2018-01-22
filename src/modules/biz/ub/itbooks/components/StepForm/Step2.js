@@ -1,7 +1,8 @@
 import React from 'react';
 import { Alert, Button, Col, Divider, Row } from 'antd';
+import QRCode from 'qrcode-react';
 
-export default ({ dispatch }) => {
+export default ({ dispatch, order}) => {
   const onPrev = () => {
     dispatch({ type: 'book/onGoToStep', payload: { step: 0 } });
   };
@@ -13,6 +14,9 @@ export default ({ dispatch }) => {
         message="确认转账后，资金将直接打入对方账户，无法退回。"
         style={{ marginBottom: 24 }}
       />
+
+      <QRCode value={order.order.codeUrl}/>
+
       <Divider/>
 
       <Row>

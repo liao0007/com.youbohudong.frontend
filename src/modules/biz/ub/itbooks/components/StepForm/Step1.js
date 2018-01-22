@@ -3,7 +3,7 @@ import { Button, Cascader, Col, Divider, Form, Input, Row } from 'antd';
 import styles from './style.less';
 import hats from './hat';
 
-export default ({ formItemLayout, form, dispatch, data, book, isUpdating }) => {
+export default ({ formItemLayout, form, dispatch, order }) => {
   const { getFieldDecorator, validateFields } = form;
   const onValidateForm = () => {
     validateFields((err, values) => {
@@ -11,7 +11,7 @@ export default ({ formItemLayout, form, dispatch, data, book, isUpdating }) => {
       const city = province.children.find(city => city.value === values.city[1]);
       const data = {
         ...values,
-        bookKey: book.key,
+        bookKey: order.book.key,
         shipToProvince: province.label,
         shipToCity: city.label,
       };
@@ -43,7 +43,7 @@ export default ({ formItemLayout, form, dispatch, data, book, isUpdating }) => {
           label="详细地址"
         >
           {getFieldDecorator('shipToAddress', {
-            initialValue: data.shipToAddress || '',
+            initialValue: order.order.shipToAddress || '',
             rules: [{ required: true, message: '输入详细地址' }],
           })(
             <Input/>,
@@ -54,7 +54,7 @@ export default ({ formItemLayout, form, dispatch, data, book, isUpdating }) => {
           label="姓名"
         >
           {getFieldDecorator('shipToName', {
-            initialValue: data.shipToName || '',
+            initialValue: order.order.shipToName || '',
             rules: [{ required: true, message: '输入姓名' }],
           })(
             <Input/>,
@@ -65,7 +65,7 @@ export default ({ formItemLayout, form, dispatch, data, book, isUpdating }) => {
           label="联系方式"
         >
           {getFieldDecorator('shipToMobile', {
-            initialValue: data.shipToMobile || '',
+            initialValue: order.order.shipToMobile || '',
             rules: [{ required: true, message: '输入联系方式' }],
           })(
             <Input/>,
@@ -82,7 +82,7 @@ export default ({ formItemLayout, form, dispatch, data, book, isUpdating }) => {
         </Col>
         <Col span={12} style={{ textAlign: 'right' }}>
           <Button onClick={() => dispatch({ type: 'book/onOrderBook', payload: { book: undefined } })} style={{marginRight: 12}}>取消</Button>
-          <Button loading={isUpdating} type="primary" onClick={onValidateForm}>下一步</Button>
+          <Button loading={order.isUpdating} type="primary" onClick={onValidateForm}>下一步</Button>
         </Col>
       </Row>
     </div>

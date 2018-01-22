@@ -61,15 +61,15 @@ class CardList extends PureComponent {
     const validCategory = categories.filter(
       category => categoryKeyArr.includes(category.key)).map(category => ({ key: category.key, name: category.name }));
 
-    const categoryRender = validCategory.map(category => <Link style={{ marginRight: 10 }}
+    const categoryRender = validCategory.map(category => <Link key={category.key} style={{ marginRight: 10 }}
                                                                to={`${this.props.moduleRootPath}${category.key}`}>{category.name}</Link>);
-    const subcategoryRender = validSubcategories.map(({ category, subcategory }) => <Link style={{ marginRight: 10 }}
+    const subcategoryRender = validSubcategories.map(({ category, subcategory }) => <Link key={subcategory.key} style={{ marginRight: 10 }}
                                                                                           to={`${this.props.moduleRootPath}${category.key}/${subcategory.key}`}>{category.name}/{subcategory.name}</Link>);
     return [...categoryRender, subcategoryRender];
   }
 
   render() {
-    const { books, isUpdating, order } = this.props;
+    const { books, isUpdating } = this.props;
     const { activeCategory, activeSubcategory, keywords } = this.props.match.params;
 
     return (
@@ -99,15 +99,15 @@ class CardList extends PureComponent {
                     col={1}
                     size={'small'}
                   >
-                    <Description term='Author'>{this.state.activeBook.author}</Description>
-                    <Description term="ISBN-10">{this.state.activeBook.isbn}</Description>
-                    <Description term='Year'>{this.state.activeBook.year}</Description>
-                    <Description term="Pages">{this.state.activeBook.pages}</Description>
-                    <Description term='Language'>{this.state.activeBook.language}</Description>
-                    <Description term='File size'>{this.state.activeBook.fileSize} MB</Description>
-                    <Description term='File format'>{this.state.activeBook.fileFormat}</Description>
-                    <Description term='Category'>{this.renderCategory(this.state.activeBook.categoryKey,
-                      this.state.activeBook.subcategoryKey)}</Description>
+                    <Description term='Author'><span>{this.state.activeBook.author}</span></Description>
+                    <Description term="ISBN-10"><span>{this.state.activeBook.isbn}</span></Description>
+                    <Description term='Year'><span>{this.state.activeBook.year}</span></Description>
+                    <Description term="Pages"><span>{this.state.activeBook.pages}</span></Description>
+                    <Description term='Language'><span>{this.state.activeBook.language}</span></Description>
+                    <Description term='File size'><span>{this.state.activeBook.fileSize} MB</span></Description>
+                    <Description term='File format'><span>{this.state.activeBook.fileFormat}</span></Description>
+                    <Description term='Category'><span>{this.renderCategory(this.state.activeBook.categoryKey,
+                      this.state.activeBook.subcategoryKey)}</span></Description>
                   </DescriptionList>
 
                 </Col>
@@ -120,12 +120,14 @@ class CardList extends PureComponent {
                 <Col span={24}>
                   <Button ghost style={{ marginRight: 16 }} type={'primary'} size={'large'} onClick={() => this.handleDownload(this.state.activeBook)}
                           icon={'download'}>下载PDF</Button>
+                  {/*
                   <Button ghost style={{ marginRight: 16 }} size={'large'}
                           onClick={() => {
                             const book = this.state.activeBook;
                             this.setState({ activeBook: undefined });
                             this.props.dispatch({ type: 'book/onOrderBook', payload: { book: book } });
                           }} icon={'shop'}>购买打印本</Button>
+                  */}
                   <Button ghost size={'large'} onClick={() => this.setState({ activeBook: undefined })} icon={'close'}>关闭</Button>
                 </Col>
               </Row>
@@ -174,9 +176,9 @@ class CardList extends PureComponent {
                 >
 
                   <List.Item.Meta
-                    title={(<h4>{item.title}<br/>
+                    title={(<div>{item.title}<br/>
                       <small>By {item.author}, {item.year}</small>
-                    </h4>)}
+                    </div>)}
                     description={item.subtitle ? item.subtitle : ''}
                   />
 
