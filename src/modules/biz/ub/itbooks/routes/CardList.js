@@ -121,13 +121,13 @@ class CardList extends PureComponent {
                   <Button ghost style={{ marginRight: 16 }} type={'primary'} size={'large'} onClick={() => this.handleDownload(this.state.activeBook)}
                           icon={'download'}>下载PDF</Button>
                   {/*
-                  <Button ghost style={{ marginRight: 16 }} size={'large'}
-                          onClick={() => {
-                            const book = this.state.activeBook;
-                            this.setState({ activeBook: undefined });
-                            this.props.dispatch({ type: 'book/onOrderBook', payload: { book: book } });
-                          }} icon={'shop'}>购买打印本</Button>
-                  */}
+                   <Button ghost style={{ marginRight: 16 }} size={'large'}
+                   onClick={() => {
+                   const book = this.state.activeBook;
+                   this.setState({ activeBook: undefined });
+                   this.props.dispatch({ type: 'book/onOrderBook', payload: { book: book } });
+                   }} icon={'shop'}>购买打印本</Button>
+                   */}
                   <Button ghost size={'large'} onClick={() => this.setState({ activeBook: undefined })} icon={'close'}>关闭</Button>
                 </Col>
               </Row>
@@ -170,15 +170,17 @@ class CardList extends PureComponent {
                     <a onClick={() => this.setState({ activeBook: item })}><Icon type="info-circle-o"
                                                                                  style={{ marginRight: 8 }}/>详情</a>,
                   ]}
-                  extra={<img style={{ marginBottom: this.state.isMobile ? 16 : 0 }} width={this.state.isMobile ? window.innerWidth - 48 : 200}
-                              alt="cover"
-                              src={`http://static.itbooks.youbohudong.com/${item.cover}`}/>}
+                  extra={!this.state.isMobile ? (<img width={200} alt="cover" src={`http://static.itbooks.youbohudong.com/${item.cover}`}/>) : null}
                 >
 
                   <List.Item.Meta
-                    title={(<div>{item.title}<br/>
+                    title={this.state.isMobile ? (
+                      <Row gutter={12}><Col span={8}><img width="100%" alt="cover" src={`http://static.itbooks.youbohudong.com/${item.cover}`}/></Col><Col span={16}>{item.title}<br/>
+                        <small>By {item.author}, {item.year}</small>
+                      </Col></Row>) : (<Row><Col>{item.title}<br/>
                       <small>By {item.author}, {item.year}</small>
-                    </div>)}
+                    </Col></Row>)
+                    }
                     description={item.subtitle ? item.subtitle : ''}
                   />
 
