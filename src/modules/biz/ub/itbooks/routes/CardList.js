@@ -175,7 +175,7 @@ class CardList extends PureComponent {
 
                   <List.Item.Meta
                     title={this.state.isMobile ? (
-                      <Row gutter={6}><Col span={8}><img width="100%" alt="cover" src={`http://static.itbooks.youbohudong.com/${item.cover}`}/></Col><Col span={16}>{item.title}<br/>
+                      <Row gutter={16}><Col span={8}><img width="100%" alt="cover" src={`http://static.itbooks.youbohudong.com/${item.cover}`}/></Col><Col span={16}>{item.title}<br/>
                         <small>By {item.author}, {item.year}</small>
                       </Col></Row>) : (<Row><Col>{item.title}<br/>
                       <small>By {item.author}, {item.year}</small>
