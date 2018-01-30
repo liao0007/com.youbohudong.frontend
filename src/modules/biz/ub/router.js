@@ -5,11 +5,13 @@ import dynamic from 'dva/dynamic';
 export default ({ app, history, match }) => {
 
   const ITBooksModule = dynamic({ app, component: () => import('./itbooks/router'), });
+  const RedPacket20180218Module = dynamic({ app, component: () => import('./redpacket20180212/router'), });
 
   return (
     <Router history={history}>
       <Switch>
         <Route path={`${match.path}/itbooks`} render={(props) => <ITBooksModule {...props} app={app}/>}/>
+        <Route path={`${match.path}/redpacket20180212`} render={(props) => <RedPacket20180218Module {...props} app={app}/>}/>
       </Switch>
     </Router>
   );
