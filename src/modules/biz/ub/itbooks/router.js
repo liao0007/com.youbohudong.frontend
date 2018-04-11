@@ -23,10 +23,18 @@ function RouterConfig({ history, app, match }) {
     component: () => import('./routes/CardList'),
   });
 
+  const PdfViewerPage = dynamic({
+    app,
+    models: () => [import('./models/user'), import('./models/book')],
+    component: () => import('./routes/PdfViewer'),
+  });
+
   return (
     <Router history={history}>
       <Switch>
-        <Route path={`${match.path}/search/:keywords`} render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
+        <Route exact path={`${match.path}/viewer/:book`} render={props => <PdfViewerPage {...props} moduleRootPath={match.path + '/'}/>}/>
+        <Route exact path={`${match.path}/search/:keywords`} render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
+
         <Route path={`${match.path}/:activeCategory/:activeSubcategory`}
                render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
         <Route path={`${match.path}/:activeCategory`} render={props => <CardListPage {...props} moduleRootPath={match.path + '/'}/>}/>
