@@ -44,7 +44,7 @@ class CardList extends PureComponent {
   }
 
   handleDownload(item) {
-    window.open(`http://static.itbooks.youbohudong.com/${item.url}`);
+    window.open(`http://static.freebooks.youbohudong.com/${item.url}`);
   }
 
   renderCategory(categoryKeys, subcategoryKeys) {
@@ -112,7 +112,7 @@ class CardList extends PureComponent {
 
                 </Col>
                 <Col span={8}>
-                  <img style={{ width: '100%' }} alt="cover" src={`http://static.itbooks.youbohudong.com/${this.state.activeBook.cover}`}/>
+                  <img style={{ width: '100%' }} alt="cover" src={`http://static.freebooks.youbohudong.com/${this.state.activeBook.cover}`}/>
                 </Col>
               </Row>
 
@@ -170,12 +170,12 @@ class CardList extends PureComponent {
                     <a onClick={() => this.setState({ activeBook: item })}><Icon type="info-circle-o"
                                                                                  style={{ marginRight: 8 }}/>详情</a>,
                   ]}
-                  extra={!this.state.isMobile ? (<img width={200} alt="cover" src={`http://static.itbooks.youbohudong.com/${item.cover}`}/>) : null}
+                  extra={!this.state.isMobile ? (<img width={200} alt="cover" src={`http://static.freebooks.youbohudong.com/${item.cover}`}/>) : null}
                 >
 
                   <List.Item.Meta
                     title={this.state.isMobile ? (
-                      <Row><Col span={8}><img width="100%" alt="cover" src={`http://static.itbooks.youbohudong.com/${item.cover}`}/></Col><Col span={16} style={{paddingLeft: 6}}>{item.title}<br/>
+                      <Row><Col span={8}><img width="100%" alt="cover" src={`http://static.freebooks.youbohudong.com/${item.cover}`}/></Col><Col span={16} style={{paddingLeft: 6}}>{item.title}<br/>
                         <small>By {item.author}, {item.year}</small>
                       </Col></Row>) : (<Row><Col>{item.title}<br/>
                       <small>By {item.author}, {item.year}</small>
