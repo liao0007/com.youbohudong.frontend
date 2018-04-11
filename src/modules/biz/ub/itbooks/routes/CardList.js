@@ -44,7 +44,8 @@ class CardList extends PureComponent {
   }
 
   handleDownload(item) {
-    window.open(`${this.props.moduleRootPath}viewer/${encodeURIComponent(item.url)}`);
+    window.open(`http://static.freebooks.youbohudong.com/${item.url}`);
+    // window.open(`${this.props.moduleRootPath}viewer/${encodeURIComponent(item.url)}`);
   }
 
   renderCategory(categoryKeys, subcategoryKeys) {

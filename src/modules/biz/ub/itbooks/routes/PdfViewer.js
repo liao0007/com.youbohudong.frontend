@@ -52,7 +52,6 @@ class PdfViewer extends PureComponent {
   }
 
   render() {
-    console.log(this.state.book)
     let pagination = null;
     if (this.state.pages) {
       pagination = this.renderPagination(this.state.page, this.state.pages);
@@ -61,9 +60,9 @@ class PdfViewer extends PureComponent {
       return <div>
         <PDF
           file={this.state.book}
-          onDocumentComplete={this.onDocumentComplete}
-          onPageComplete={this.onPageComplete}
-          page={this.state.page}
+          // onDocumentComplete={this.onDocumentComplete}
+          // onPageComplete={this.onPageComplete}
+          // page={this.state.page}
         />
         {pagination}
       </div>
