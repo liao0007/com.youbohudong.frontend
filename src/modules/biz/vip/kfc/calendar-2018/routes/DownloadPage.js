@@ -151,20 +151,13 @@ class DownloadPage extends Component {
   }
 
   gotoAppStore() {
-    this.setState({
-      ...this.state,
-      isShowCoupon: true,
-    });
-    return;
-
-    //
     if (isWeChatBrowser()) {
       this.setState({
         isHintVisible: true,
         isLoading: false,
       });
     } else {
-      window.location.href = 'http://www.apple.com/';
+      window.location.href = 'https://itunes.apple.com/us/app/k记大玩家/id1320773396?ls=1&mt=8';
     }
   };
 
