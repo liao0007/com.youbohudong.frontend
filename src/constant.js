@@ -9,7 +9,7 @@ if (hostname !== 'www.youbohudong.com') {
   };
 } else {
   _constant = {
-    BizDomain: 'http://localhost:3000/biz/',
+    BizDomain: 'http://localhost:8000/biz/',
     ApiDomain: 'http://localhost:9000/api/',
     StaticDomain: 'https://static.youbohudong.com/',
   };
